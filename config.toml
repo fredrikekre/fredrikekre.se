@@ -23,7 +23,7 @@ disableKinds = ["RSS"]
   # nofollowLinks = true
 
 [taxonomies]
-  tag = "tags"
+  # tag = "tags"
   # Categories are disabled by default.
 
 [params]
