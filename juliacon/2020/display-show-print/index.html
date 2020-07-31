@@ -17,7 +17,7 @@
   <title>
     
         
-          JuliaCon 2020: <code>display</code>, <code>show</code> and <code>print</code> – how Julia's display system works -
+          JuliaCon 2020: display, show and print – how Julia's display system works |
         
     
     
@@ -92,14 +92,13 @@
 
   <article>
 
-  <h1 class="post-title"> JuliaCon 2020: <code>display</code>, <code>show</code> and <code>print</code> – how Julia's display system works </h1>
-
   <div class="post-content">
  
 
 <!-- Content appended here -->
 
 <div class="franklin-content">
+<h1 id="juliacon_2020_display_show_and_print_how_julias_display_system_works"><a href="#juliacon_2020_display_show_and_print_how_julias_display_system_works">JuliaCon 2020: <code>display</code>, <code>show</code> and <code>print</code> – how Julia&#39;s display system works</a></h1>
 <p>This is one of my presentations from JuliaCon 2020. The slides are available 
 <a href="slides" target="_blank">here</a>.
 
@@ -107,8 +106,7 @@
 <p>When Julia finishes a computation and obtains a value the user is presented with the result. In the Julia REPL the result is usually represented as plain text. In other environments, such as in a Jupyter notebook, you sometimes see more rich representations, for example some values display as HTML, and others as images.</p>
 <p>The main functions responsible for output in Julia are <code>display</code> and <code>show</code>. Usually <code>display</code> is the first method to be called when an object is presented to the user. The <code>display</code> function is implemented by displays such as the Julia REPL, the IDE or the notebook interface. Next, <code>display</code> requests output from <code>show</code> with a specific so-called MIME-type. Which MIME-types that are requested depends on what output the display is able to present back to the user. For example, the REPL mostly works with the <code>text/plain</code> MIME-type, and the notebook display supports multiple additional MIME-types, for example <code>image/png</code> for image output, <code>text/html</code> for HTML output, and so on. Given this rough overview the display system might seem rather simple, but there are many hidden complexities.</p>
 <p>In order to take advantage of the rich display system and implement &quot;pretty printing&quot; for a custom type it is generally enough to implement methods of <code>show</code> with specific MIME-types. All types get a default text representation, but this can easily be overridden by implementing <code>show</code> with the <code>text/plain</code> MIME type. If the type can be represented in richer formats it is simple to add additional methods. For example, in order to support image output in a notebook it is enough to implement <code>show</code> with the <code>image/png</code> MIME type.</p>
-<p>This talk will present how Julia&#39;s display system works and go through the process of taking an output object and generating output to present the user with. The talk will also examplify this process by discussing how to customize the output for your own types.</p>
-
+<p>This talk will present how Julia&#39;s display system works and go through the process of taking an output object and generating output to present the user with. The talk will also examplify this process by discussing how to customize the output for your own types.
 
 </div>
 <!-- CONTENT ENDS HERE -->
