@@ -477,7 +477,7 @@ a.button.wide {
  background:#39b54a;
  margin-left:5px;
  border-radius:1px;
- animation:cursor 1s infinite;
+ animation:cursor 1.5s infinite;
 }
 @media(prefers-reduced-motion:reduce) {
  .logo__cursor {
@@ -1135,4 +1135,60 @@ a {
   font-size: 1.5em;
   height: 1.5em;
   width: 1.5em;
+}
+
+#spotlight {
+  display: flex;
+  /*height: 100vh;*/
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /*max-width: 93%;*/
+  margin: auto;
+  font-size: 1.5rem;
+}
+#spotlight.error-404 {
+  flex-direction: row;
+  line-height: normal;
+}
+p.img-404 svg {
+  width: 180px;
+  max-width: 100%;
+  height: auto;
+}
+.animated.slower {
+  -webkit-animation-duration: 3s;
+  animation-duration: 3s;
+}
+.animated.infinite {
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+.flash {
+  -webkit-animation-name: flash;
+  animation-name: flash;
+}
+@keyframes flash {
+ 0%,
+ 50%,
+ to {
+  opacity:1
+ }
+ 25%,
+ 75% {
+  opacity:0
+ }
+}
+.banner-404 {
+  margin-left: 2em;
+}
+#spotlight.error-404 {
+  line-height: normal;
+}
+#spotlight {
+  font-size: 1.5rem;
+}
+.banner-404 h1 {
+  font-size: 3em;
+  margin: .5rem 0;
 }
