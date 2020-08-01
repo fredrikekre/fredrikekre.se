@@ -7,8 +7,7 @@
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for petefreitag.com" href="/" />
 
-   <link rel="stylesheet" href="/libs/katex/katex.min.css">
-     
+  
   <!-- {{if hascode}} {{insert head_highlight.html }}   {{end}} -->
   <!-- <link rel="stylesheet" href="/css/franklin.css"> -->
   <meta name="theme-color" content="#ffffff" />
@@ -96,22 +95,18 @@
  
 
 <!-- Content appended here -->
-
-<div class="franklin-content">
-<h1 id="juliacon_2019_pkg_projecttoml_manifesttoml_and_environments"><a href="#juliacon_2019_pkg_projecttoml_manifesttoml_and_environments">JuliaCon 2019: <code>Pkg</code>, <code>Project.toml</code>, <code>Manifest.toml</code> and Environments</a></h1>
+<div class="franklin-content"><h1 id="juliacon_2019_pkg_projecttoml_manifesttoml_and_environments"><a href="#juliacon_2019_pkg_projecttoml_manifesttoml_and_environments">JuliaCon 2019: <code>Pkg</code>, <code>Project.toml</code>, <code>Manifest.toml</code> and Environments</a></h1>
 <p>This is one of my presentations from JuliaCon 2019. The slides are available 
 <a href="https://docs.google.com/presentation/d/e/2PACX-1vT6XYlWB0bxAoRIz4wRG9nRGktugbTBAglNXHvOIUPfZhSSYaT5iXqfIn0ISaUjtyrXDw3Jk03PxVK8/pub?start=false&loop=false&delayms=3000" target="_blank">here</a>,
  and a recording of the talk is available 
 <a href="https://youtu.be/q-LV4zoxc-E" target="_blank">here</a>.
-
+</p>
 <h2 id="abstract"><a href="#abstract">Abstract</a></h2>
 <p>Julia&#39;s new package manager, <a href="https://github.com/JuliaLang/Pkg.jl"><code>Pkg</code></a> &#40;codename <code>Pkg3</code>&#41;, was released together with version 1.0 of the Julia language. The new package manager is a complete rewrite of the old one, and solves many of the problems observed in the old version. One major feature of the new package manager is the concept of <em>package environments</em>, which can be described as independent, sandboxed, sets of packages.</p>
 <p>A package environment is represented by a <code>Project.toml</code> and <code>Manifest.toml</code> file pair. These files keep track of what packages, and what versions, are available in a given environment. Since environments are &quot;cheap&quot;, just two files, they can be used liberally. It is often useful to create new environments for every new coding project, instead of installing packages on the global level. Since the package manager modifies the current project, e.g. when adding, removing or updating packages, there is no risk for these operations to mess up other environments.</p>
 <p>The fact that exact versions of packages in the environment is being recorded means that Julia has reproducibility built-in. As long as the <code>Project.toml</code> and <code>Manifest.toml</code> file pair is available it is possible to replicate exactly the same package environment. Some typical use cases include being able to replicate the same package environment on a different machine, and being able to go back in time and run some old code which might require some old versions of packages.</p>
-<p>In this presentation we will discuss how environments work, how they interact with the package manager and Julia&#39;s code loading, and how to effectively use them. Hopefully you will be more comfortable working with, and seeing the usefulness of, environments after this presentation.
-
-</div>
-<!-- CONTENT ENDS HERE -->
+<p>In this presentation we will discuss how environments work, how they interact with the package manager and Julia&#39;s code loading, and how to effectively use them. Hopefully you will be more comfortable working with, and seeing the usefulness of, environments after this presentation.</p>
+</div><!-- CONTENT ENDS HERE -->
  
     </div>
     </article>
@@ -144,11 +139,6 @@
             </div>
         </div>
     </footer>
-
-    
-        
-
-
 
     
     

@@ -7,8 +7,7 @@
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for petefreitag.com" href="/" />
 
-   <link rel="stylesheet" href="/libs/katex/katex.min.css">
-     
+  
   <!-- {{if hascode}} {{insert head_highlight.html }}   {{end}} -->
   <!-- <link rel="stylesheet" href="/css/franklin.css"> -->
   <meta name="theme-color" content="#ffffff" />
@@ -96,22 +95,18 @@
  
 
 <!-- Content appended here -->
-
-<div class="franklin-content">
-<h1 id="juliacon_2020_julia_for_scripting"><a href="#juliacon_2020_julia_for_scripting">JuliaCon 2020: Julia for scripting</a></h1>
+<div class="franklin-content"><h1 id="juliacon_2020_julia_for_scripting"><a href="#juliacon_2020_julia_for_scripting">JuliaCon 2020: Julia for scripting</a></h1>
 <p>This is one of my presentations from JuliaCon 2020. The slides are available 
 <a href="slides" target="_blank">here</a>,
  and a recording of the talk is available 
 <a href="https://youtu.be/IuwxE3m0_QQ" target="_blank">here</a>.
-
+</p>
 <h2 id="abstract"><a href="#abstract">Abstract</a></h2>
 <p>The &quot;scripting workflow&quot;, i.e. starting Julia, execute a code snippet, and then exit, is often not the recommended method for Julia code. One reason for this is that Julia is a just-in-time &#40;JIT&#41; compiled language, and the first call to a function is usually a lot slower than subsequent calls due to compilation. In a setting such as scripting there might only be one call to a function before exiting Julia. Spending time compiling the function might not be worth it in such a case, unless the faster runtime makes up for it. A simple example is a script that defines a single function, calls it, and then exits.</p>
 <p>The recommended Julia workflow is instead to keep a single Julia session alive for as long as possible, and reuse it for multiple tasks. Even though two tasks A and B are not directly related, they may both use, for example, arrays. Thus, after performing task A we have already compiled some array methods, and task B will benefit from that, with reduced compilation time as the result. This interaction is something that scripting can not take advantage of, since compiled methods are forgotten when exiting Julia.</p>
 <p>The problems presented above have two obvious possible solutions: &#40;i&#41; spend less time compiling and &#40;ii&#41; store compiled methods and make them available in future sessions. For the first option we can use Julias interpreter and only compile whats necessary. This is often a great solution for very short-running tasks, and requires nothing extra, just some command line flags to Julia. The second option is a bit more involved &#40;although nowadays pretty easy using the <a href="https://github.com/JuliaLang/PackageCompiler.jl">PackageCompiler.jl</a> package&#41;, however, it can completely elimitate runtime compilation. The downside is that the compiled and cached methods live in a separate file that needs to be bundled with the script.</p>
-<p>This talk will discuss how Julia can be used for scripting, present some tips and tricks on how to make scripting more viable, and show some succesful examples of the two solutions presented above.
-
-</div>
-<!-- CONTENT ENDS HERE -->
+<p>This talk will discuss how Julia can be used for scripting, present some tips and tricks on how to make scripting more viable, and show some succesful examples of the two solutions presented above.</p>
+</div><!-- CONTENT ENDS HERE -->
  
     </div>
     </article>
@@ -144,11 +139,6 @@
             </div>
         </div>
     </footer>
-
-    
-        
-
-
 
     
     

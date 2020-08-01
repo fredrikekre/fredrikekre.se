@@ -7,8 +7,7 @@
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="RSS Feed for petefreitag.com" href="/" />
 
-   <link rel="stylesheet" href="/libs/katex/katex.min.css">
-     
+  
   <!-- {{if hascode}} {{insert head_highlight.html }}   {{end}} -->
   <!-- <link rel="stylesheet" href="/css/franklin.css"> -->
   <meta name="theme-color" content="#ffffff" />
@@ -96,22 +95,18 @@
  
 
 <!-- Content appended here -->
-
-<div class="franklin-content">
-<h1 id="juliacon_2019_literate_programming_with_literatejl"><a href="#juliacon_2019_literate_programming_with_literatejl">JuliaCon 2019: Literate programming with <code>Literate.jl</code></a></h1>
+<div class="franklin-content"><h1 id="juliacon_2019_literate_programming_with_literatejl"><a href="#juliacon_2019_literate_programming_with_literatejl">JuliaCon 2019: Literate programming with <code>Literate.jl</code></a></h1>
 <p>This is one of my presentations from JuliaCon 2019. The slides are available 
 <a href="slides" target="_blank">here</a>,
  and a recording of the talk is available 
 <a href="https://youtu.be/Tfp1WEdYfqk" target="_blank">here</a>.
-
+</p>
 <h2 id="abstract"><a href="#abstract">Abstract</a></h2>
 <p>Literate programming was introduced by Donald Knuth in 1984 and is described as an <em>explanation of the program logic in a natural language, interspersed with traditional source code</em>. <a href="https://github.com/fredrikekre/Literate.jl"><code>Literate.jl</code></a> is a simple Julia package that can be used for literate programming. The original purpose was to facilitate writing example programs for documenting Julia packages.</p>
 <p>Julia packages are often showcased and documented using &quot;example notebooks&quot;. Notebooks are great for this purpose since they contain both input source code, descriptive markdown and rich output like plots and figures, and, from the description above, notebooks can be considered a form of literate programming. One downside with notebooks is that they are a pain to deal with in version control systems like git, since they contain lots of extra data. A small change to the notebook thus often results in a large and complicated diff, which makes it harder to review the actual changes. Another downside is that notebooks require external tools, like <a href="https://jupyter.org/">Jupyter</a> and <a href="https://github.com/JuliaLang/IJulia.jl"><code>IJulia.jl</code></a> to be used effectively.</p>
 <p>With <code>Literate.jl</code> is is possible to dynamically generate notebooks from a simple source file. The source file is a regular <code>.jl</code> file, where comments are used for describing the interspersed code snippets. This means that, for basic usage, there are no new syntax to learn in order to use <code>Literate.jl</code>, basically any valid Julia source file can be used as a source file. This solves the problem with notebooks described in the previous section, since the notebook itself does not need to be checked into version control – it is just the source text file that is needed. <code>Literate.jl</code> can also, from the <em>same</em> input source file, generate markdown files to be used with e.g. <a href="https://github.com/JuliaDocs/Documenter.jl"><code>Documenter.jl</code></a> to produce HTML pages in the package documentation. This makes it easy to maintain both a notebook and HTML version of examples, since they are based on the same source file.</p>
-<p>This presentation will briefly cover the <code>Literate.jl</code> syntax, and show examples of how <code>Literate.jl</code> can be used.
-
-</div>
-<!-- CONTENT ENDS HERE -->
+<p>This presentation will briefly cover the <code>Literate.jl</code> syntax, and show examples of how <code>Literate.jl</code> can be used.</p>
+</div><!-- CONTENT ENDS HERE -->
  
     </div>
     </article>
@@ -144,11 +139,6 @@
             </div>
         </div>
     </footer>
-
-    
-        
-
-
 
     
     
