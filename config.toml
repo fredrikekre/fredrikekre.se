@@ -2,7 +2,7 @@ baseURL = "https://fredrikekre.se"
 languageCode = "en-us"
 defaultContentLanguage = "en"
 title = "Fredrik Ekre"
-theme = "hermit"
+theme = "hello-friend-ng"
 # enableGitInfo = true
 pygmentsCodefences  = true
 pygmentsUseClasses  = true
@@ -64,14 +64,18 @@ disableKinds = ["RSS"]
     name = "github"
     url = "https://github.com/fredrikekre"
 
-# [menu]
+  [[params.social]]
+    name = "gpg"
+    url = "/CNAME"
 
-  # [[menu.main]]
-    # name = "Posts"
-    # url = "posts/"
+[menu]
+
+  [[menu.main]]
+    name = "Posts"
+    url = "posts/"
     # weight = 10
 
-  # [[menu.main]]
-    # name = "About"
-    # url = "about-hugo/"
-    # weight = 20
+  [[menu.main]]
+    name = "About"
+    url = "about-hugo/"
+    weight = 20
