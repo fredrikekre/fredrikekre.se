@@ -1,0 +1,355 @@
+
+name: titlepage
+
+
+class: middle, centre
+
+
+
+
+
+
+# Julia for scripting
+
+
+Fredrik Ekre, JuliaCon 2020
+
+
+Slides @ [fredrikekre.se/juliacon](https://fredrikekre.se/juliacon/)
+
+
+---
+
+
+
+
+
+
+# What is "scripting"?
+
+
+Executing a script from the command line, e.g.
+
+
+```bash
+$ cat script.jl
+println("Hello JuliaCon!")
+```
+
+
+--
+
+
+```bash
+$ julia script.jl
+Hello JuliaCon!
+```
+
+
+---
+
+
+name: problem
+
+
+
+
+
+
+# What are the problems?
+
+
+--
+
+
+  * Julia startup time
+
+    ```bash
+    $ time julia script.jl
+    Hello JuliaCon!
+
+    real    0m0.170s
+    user    0m0.111s
+    sys     0m0.045s
+
+    $ time python script.py
+    Hello JuliaCon!
+
+    real    0m0.011s
+    user    0m0.004s
+    sys     0m0.007s
+    ```
+
+
+--
+
+
+  * Package load time
+
+
+--
+
+
+  * Compile time
+
+
+--
+
+
+*This is continuously beeing worked on and improved with each Julia release.*
+
+
+---
+
+
+
+
+
+
+# Is it a problem?
+
+
+--
+
+
+  * Yes, for short workloads (runtime ~ startup + compile time), e.g. quick tasks for interactive use at the command line
+
+
+--
+
+
+  * No, for longer workloads where time spent on compilation is negligible compared to compute time, e.g. cluster computations
+
+
+---
+
+
+name: solutions
+
+
+
+
+
+
+# Possible remedies
+
+
+Fewer Julia startups:
+
+
+  * keep the same session running for a long time
+  * pay for startup once, pay for compile time once
+  * very useful workflow together with e.g. Revise
+
+
+--
+
+
+Now we are not scripting...
+
+
+--
+
+
+<hr />
+
+
+.daemon[
+
+
+*[DaemonMode.jl](https://github.com/dmolina/DaemonMode.jl) by Daniel Molina (@dmolina):*
+
+
+  * *Server: Julia session that is running in the background*
+  * *Client: Wrapper script that passes everything to the server*
+
+
+]
+
+
+---
+
+
+name: solutions
+
+
+
+
+# Possible remedies
+
+
+Save compiled code for reuse:
+
+
+  * enhance the Julia sysimg by appending compiled code corresponding to your workload
+
+
+  * particularly useful to decrease package load times
+  * specify sysimg on startup:
+
+    ```bash
+    $ julia --sysimage custom-img.so script.jl
+    ```
+
+
+--
+
+
+*See Kristoffer Carlsson's talk on [PackageCompiler.jl](https://github.com/JuliaLang/PackageCompiler.jl) from JuliaCon 2020.*
+
+
+---
+
+
+name: solutions
+
+
+
+
+# Possible remedies
+
+
+Spend less time compiling:
+
+
+  * decrease/skip compiler optimizations (see the `-O`/`--optimize` flag)
+
+
+  * utilize Julias interpreter (see the `--compile` flag)
+
+
+---
+
+
+name: example
+
+
+
+
+
+
+# Example
+
+
+[`jlpkg`](https://github.com/fredrikekre/jlpkg): a command line interface to Julia's package manager
+
+
+  * `--compile=min` to minimize compilation
+  * `--optimize=0` to minimize optimizations
+  * benefits from not using any external packages
+
+
+---
+
+
+name: example
+
+
+
+
+# Example
+
+
+[`jlpkg`](https://github.com/fredrikekre/jlpkg): a command line interface to Julia's package manager
+
+
+  * `--compile=min` to minimize compilation
+  * `--optimize=0` to minimize optimizations
+  * benefits from not using any external packages
+
+
+```bash
+$ time jlpkg status
+
+real    0m0.210s
+user    0m0.253s
+sys     0m0.080s
+
+$ time julia -e 'using Pkg; Pkg.status()'
+
+real    0m0.444s
+user    0m0.442s
+sys     0m0.129s
+```
+
+
+---
+
+
+name: example
+
+
+
+
+# Example
+
+
+[`jlpkg`](https://github.com/fredrikekre/jlpkg): a command line interface to Julia's package manager
+
+
+  * `--compile=min` to minimize compilation
+  * `--optimize=0` to minimize optimizations
+  * benefits from not using any external packages
+
+
+```bash
+$ time jlpkg add DataFrames
+
+real    0m0.864s
+user    0m0.929s
+sys     0m0.125s
+
+$ time julia -e 'using Pkg; Pkg.add("DataFrames")'
+
+real    0m1.958s
+user    0m1.644s
+sys     0m0.185s
+```
+
+
+---
+
+
+name: example
+
+
+
+
+# Example
+
+
+[`jlpkg`](https://github.com/fredrikekre/jlpkg): a command line interface to Julia's package manager
+
+
+  * `--compile=min` to minimize compilation
+  * `--optimize=0` to minimize optimizations
+  * benefits from not using any external packages
+
+
+```bash
+$ time jlpkg rm DataFrames
+
+real    0m0.209s
+user    0m0.257s
+sys     0m0.145s
+
+$ time julia -e 'using Pkg; Pkg.rm("DataFrames")'
+
+real    0m0.701s
+user    0m0.691s
+sys     0m0.200s
+```
+
+
+---
+
+
+class: center, middle
+
+
+
+
+
+
+# Thanks for listening!
+

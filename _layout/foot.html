@@ -1,0 +1,48 @@
+<!-- CONTENT ENDS HERE -->
+{{ ispage /posts/*}} {{ isnotpage /posts/index.html }}
+    </div>
+    </article>
+    <hr>
+
+
+<!--
+    <div class="post-info">
+    <p>
+    {{ svg tag }} {{ jlinsert pagetags }}
+    </p>
+
+
+    </div>
+-->
+
+    </main>
+{{ end }} {{ end }}
+
+
+    </div> <!-- <div class="content"> -->
+    <footer class="footer">
+        <div class="footer__inner">
+            <div class="footer__content">
+                <span>&copy {{ eval year(today()) }} <a rel="author" href="/">{{ fill author.name }}</a></span>
+                <span><a rel="license" href="/about/#license">License</a></span>
+                <span><a href="/about/#privacy_policy">Privacy Policy</a></span>
+            </div>
+        </div>
+        <div class="footer__inner">
+            <div class="footer__content">
+                <span>Website built with <a href="https://franklinjl.org/" target="_blank" rel="noopener">Franklin.jl</a></span>
+            </div>
+        </div>
+    </footer>
+
+    {{ if hasmath }}
+        {{ insert foot_katex.html }}
+    {{ end }}
+    {{ if hascode }}
+        {{ insert foot_highlight.html }}
+    {{ end }}
+    <script src="/libs/hello-hermit.js"></script>
+
+    </div> <!-- container -->
+  </body>
+</html>

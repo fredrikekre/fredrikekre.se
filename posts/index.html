@@ -1,0 +1,14 @@
+{{ define title="Posts" }}
+
+{{ insert head.html }}
+
+
+<main class="posts">
+
+<h1><a href="{{ get_url }}">{{ fill title }}</a></h1>
+
+{{ list_posts /posts }}
+
+</main>
+
+{{ insert foot.html }}

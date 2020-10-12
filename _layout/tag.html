@@ -1,0 +1,10 @@
+{{ definetagtitle }}
+
+{{ insert head.html }}
+<main class="posts">
+    <!-- <h1>{{ svg tag }} Posts with tag #<u>{{ fill fd_tag }}</u></h1> -->
+  <h1 class="tag-page-title">{{ svg tag }} #<u>{{ fill fd_tag }}</u></h1>
+    {{ taglist }}
+</main>
+{{ insert foot.html }}
+{{ undef title }}
