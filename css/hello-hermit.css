@@ -956,7 +956,7 @@ hr {
  border-bottom:1px solid #fff
 }
 .post-info svg {
- margin-right:.8em
+ margin-right:.5em
 }
 .post-info .tag {
  margin-right:.5em
@@ -970,6 +970,14 @@ hr {
  width:1em;
  height:1em
 }
+
+.post-info svg {
+  display:inline-block;
+  vertical-align:-.125em;
+  width:1em;
+  height:1em
+ }
+
 .post .flag {
  border-radius:50%;
  margin:0 5px
@@ -1118,9 +1126,11 @@ hr {
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
   text-decoration: none;
 }
+/*
 h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover {
   text-decoration: underline;
 }
+*/
 
 /*.post-content h1 {
  font-size:2.625rem;
@@ -1191,4 +1201,15 @@ p.img-404 svg {
 .banner-404 h1 {
   font-size: 3em;
   margin: .5rem 0;
+}
+h1 code {
+  background: inherit;
+}
+.dark-theme h1 code {
+  background: inherit;
+}
+.tag-page-title svg {
+  font-size: 1.5rem;
+  height: 1.5em;
+  width: 1.5em;
 }
