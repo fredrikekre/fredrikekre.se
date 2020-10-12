@@ -1209,7 +1209,7 @@ h1 code {
   background: inherit;
 }
 .tag-page-title svg {
-  font-size: 1.5rem;
-  height: 1.5em;
-  width: 1.5em;
+  height: 1em;
+  width: 1em;
+  vertical-align: -0.4rem;
 }
