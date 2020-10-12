@@ -16,7 +16,7 @@
   <title>
     
         
-          JuliaCon 2020: Julia for scripting |
+          JuliaCon 2019: Pkg, Project.toml, Manifest.toml and Environments |
         
     
     
@@ -51,6 +51,8 @@
   <nav class="menu">
     <ul class="menu__inner">
       
+        <li><a href="/posts/">Posts</a></li>
+      
         <li><a href="/about/">About</a></li>
       
       <!-- {{ generate_menu nothing }} -->
@@ -84,7 +86,7 @@
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 2 minutes
   </span>
   <span>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 2020-07-29
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 2019-07-23
   </span>
   </p>
   <p>
@@ -100,18 +102,18 @@
 <!-- Content appended here -->
 <div class="franklin-content">
 
-<h1 class="post-title"><a href="/juliacon/2020/julia-for-scripting/">JuliaCon 2020: Julia for scripting</a></h1>
+<h1 class="post-title"><a href="/posts/2019/pkg-project-manifest-environments/">JuliaCon 2019: <code>Pkg</code>, <code>Project.toml</code>, <code>Manifest.toml</code> and Environments</a></h1>
 
-<p>This is one of my presentations from JuliaCon 2020. The slides are available 
-<a href="slides" target="_blank">here</a>,
+<p>This is one of my presentations from JuliaCon 2019. The slides are available 
+<a href="https://docs.google.com/presentation/d/e/2PACX-1vT6XYlWB0bxAoRIz4wRG9nRGktugbTBAglNXHvOIUPfZhSSYaT5iXqfIn0ISaUjtyrXDw3Jk03PxVK8/pub?start=false&loop=false&delayms=3000" target="_blank">here</a>,
  and a recording of the talk is available 
-<a href="https://youtu.be/IuwxE3m0_QQ" target="_blank">here</a>.
+<a href="https://youtu.be/q-LV4zoxc-E" target="_blank">here</a>.
 </p>
 <h2 id="abstract"><a href="#abstract">Abstract</a></h2>
-<p>The &quot;scripting workflow&quot;, i.e. starting Julia, execute a code snippet, and then exit, is often not the recommended method for Julia code. One reason for this is that Julia is a just-in-time &#40;JIT&#41; compiled language, and the first call to a function is usually a lot slower than subsequent calls due to compilation. In a setting such as scripting there might only be one call to a function before exiting Julia. Spending time compiling the function might not be worth it in such a case, unless the faster runtime makes up for it. A simple example is a script that defines a single function, calls it, and then exits.</p>
-<p>The recommended Julia workflow is instead to keep a single Julia session alive for as long as possible, and reuse it for multiple tasks. Even though two tasks A and B are not directly related, they may both use, for example, arrays. Thus, after performing task A we have already compiled some array methods, and task B will benefit from that, with reduced compilation time as the result. This interaction is something that scripting can not take advantage of, since compiled methods are forgotten when exiting Julia.</p>
-<p>The problems presented above have two obvious possible solutions: &#40;i&#41; spend less time compiling and &#40;ii&#41; store compiled methods and make them available in future sessions. For the first option we can use Julias interpreter and only compile whats necessary. This is often a great solution for very short-running tasks, and requires nothing extra, just some command line flags to Julia. The second option is a bit more involved &#40;although nowadays pretty easy using the <a href="https://github.com/JuliaLang/PackageCompiler.jl">PackageCompiler.jl</a> package&#41;, however, it can completely elimitate runtime compilation. The downside is that the compiled and cached methods live in a separate file that needs to be bundled with the script.</p>
-<p>This talk will discuss how Julia can be used for scripting, present some tips and tricks on how to make scripting more viable, and show some succesful examples of the two solutions presented above.</p>
+<p>Julia&#39;s new package manager, <a href="https://github.com/JuliaLang/Pkg.jl"><code>Pkg</code></a> &#40;codename <code>Pkg3</code>&#41;, was released together with version 1.0 of the Julia language. The new package manager is a complete rewrite of the old one, and solves many of the problems observed in the old version. One major feature of the new package manager is the concept of <em>package environments</em>, which can be described as independent, sandboxed, sets of packages.</p>
+<p>A package environment is represented by a <code>Project.toml</code> and <code>Manifest.toml</code> file pair. These files keep track of what packages, and what versions, are available in a given environment. Since environments are &quot;cheap&quot;, just two files, they can be used liberally. It is often useful to create new environments for every new coding project, instead of installing packages on the global level. Since the package manager modifies the current project, e.g. when adding, removing or updating packages, there is no risk for these operations to mess up other environments.</p>
+<p>The fact that exact versions of packages in the environment is being recorded means that Julia has reproducibility built-in. As long as the <code>Project.toml</code> and <code>Manifest.toml</code> file pair is available it is possible to replicate exactly the same package environment. Some typical use cases include being able to replicate the same package environment on a different machine, and being able to go back in time and run some old code which might require some old versions of packages.</p>
+<p>In this presentation we will discuss how environments work, how they interact with the package manager and Julia&#39;s code loading, and how to effectively use them. Hopefully you will be more comfortable working with, and seeing the usefulness of, environments after this presentation.</p>
 </div><!-- CONTENT ENDS HERE -->
  
     </div>

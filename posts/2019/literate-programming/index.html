@@ -16,7 +16,7 @@
   <title>
     
         
-          JuliaCon 2019: Pkg, Project.toml, Manifest.toml and Environments |
+          JuliaCon 2019: Literate programming with Literate.jl |
         
     
     
@@ -50,6 +50,8 @@
   <!-- Navigation bar -->
   <nav class="menu">
     <ul class="menu__inner">
+      
+        <li><a href="/posts/">Posts</a></li>
       
         <li><a href="/about/">About</a></li>
       
@@ -100,18 +102,18 @@
 <!-- Content appended here -->
 <div class="franklin-content">
 
-<h1 class="post-title"><a href="/juliacon/2019/pkg-project-manifest-environments/">JuliaCon 2019: <code>Pkg</code>, <code>Project.toml</code>, <code>Manifest.toml</code> and Environments</a></h1>
+<h1 class="post-title"><a href="/posts/2019/literate-programming/">JuliaCon 2019: Literate programming with <code>Literate.jl</code></a></h1>
 
 <p>This is one of my presentations from JuliaCon 2019. The slides are available 
-<a href="https://docs.google.com/presentation/d/e/2PACX-1vT6XYlWB0bxAoRIz4wRG9nRGktugbTBAglNXHvOIUPfZhSSYaT5iXqfIn0ISaUjtyrXDw3Jk03PxVK8/pub?start=false&loop=false&delayms=3000" target="_blank">here</a>,
+<a href="slides" target="_blank">here</a>,
  and a recording of the talk is available 
-<a href="https://youtu.be/q-LV4zoxc-E" target="_blank">here</a>.
+<a href="https://youtu.be/Tfp1WEdYfqk" target="_blank">here</a>.
 </p>
 <h2 id="abstract"><a href="#abstract">Abstract</a></h2>
-<p>Julia&#39;s new package manager, <a href="https://github.com/JuliaLang/Pkg.jl"><code>Pkg</code></a> &#40;codename <code>Pkg3</code>&#41;, was released together with version 1.0 of the Julia language. The new package manager is a complete rewrite of the old one, and solves many of the problems observed in the old version. One major feature of the new package manager is the concept of <em>package environments</em>, which can be described as independent, sandboxed, sets of packages.</p>
-<p>A package environment is represented by a <code>Project.toml</code> and <code>Manifest.toml</code> file pair. These files keep track of what packages, and what versions, are available in a given environment. Since environments are &quot;cheap&quot;, just two files, they can be used liberally. It is often useful to create new environments for every new coding project, instead of installing packages on the global level. Since the package manager modifies the current project, e.g. when adding, removing or updating packages, there is no risk for these operations to mess up other environments.</p>
-<p>The fact that exact versions of packages in the environment is being recorded means that Julia has reproducibility built-in. As long as the <code>Project.toml</code> and <code>Manifest.toml</code> file pair is available it is possible to replicate exactly the same package environment. Some typical use cases include being able to replicate the same package environment on a different machine, and being able to go back in time and run some old code which might require some old versions of packages.</p>
-<p>In this presentation we will discuss how environments work, how they interact with the package manager and Julia&#39;s code loading, and how to effectively use them. Hopefully you will be more comfortable working with, and seeing the usefulness of, environments after this presentation.</p>
+<p>Literate programming was introduced by Donald Knuth in 1984 and is described as an <em>explanation of the program logic in a natural language, interspersed with traditional source code</em>. <a href="https://github.com/fredrikekre/Literate.jl"><code>Literate.jl</code></a> is a simple Julia package that can be used for literate programming. The original purpose was to facilitate writing example programs for documenting Julia packages.</p>
+<p>Julia packages are often showcased and documented using &quot;example notebooks&quot;. Notebooks are great for this purpose since they contain both input source code, descriptive markdown and rich output like plots and figures, and, from the description above, notebooks can be considered a form of literate programming. One downside with notebooks is that they are a pain to deal with in version control systems like git, since they contain lots of extra data. A small change to the notebook thus often results in a large and complicated diff, which makes it harder to review the actual changes. Another downside is that notebooks require external tools, like <a href="https://jupyter.org/">Jupyter</a> and <a href="https://github.com/JuliaLang/IJulia.jl"><code>IJulia.jl</code></a> to be used effectively.</p>
+<p>With <code>Literate.jl</code> is is possible to dynamically generate notebooks from a simple source file. The source file is a regular <code>.jl</code> file, where comments are used for describing the interspersed code snippets. This means that, for basic usage, there are no new syntax to learn in order to use <code>Literate.jl</code>, basically any valid Julia source file can be used as a source file. This solves the problem with notebooks described in the previous section, since the notebook itself does not need to be checked into version control – it is just the source text file that is needed. <code>Literate.jl</code> can also, from the <em>same</em> input source file, generate markdown files to be used with e.g. <a href="https://github.com/JuliaDocs/Documenter.jl"><code>Documenter.jl</code></a> to produce HTML pages in the package documentation. This makes it easy to maintain both a notebook and HTML version of examples, since they are based on the same source file.</p>
+<p>This presentation will briefly cover the <code>Literate.jl</code> syntax, and show examples of how <code>Literate.jl</code> can be used.</p>
 </div><!-- CONTENT ENDS HERE -->
  
     </div>

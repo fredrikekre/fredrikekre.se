@@ -16,7 +16,7 @@
   <title>
     
         
-          JuliaCon 2020: display, show and print – how Julia's display system works |
+          JuliaCon 2020: Julia for scripting |
         
     
     
@@ -51,6 +51,8 @@
   <nav class="menu">
     <ul class="menu__inner">
       
+        <li><a href="/posts/">Posts</a></li>
+      
         <li><a href="/about/">About</a></li>
       
       <!-- {{ generate_menu nothing }} -->
@@ -84,7 +86,7 @@
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 2 minutes
   </span>
   <span>
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 2020-07-31
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 2020-07-29
   </span>
   </p>
   <p>
@@ -100,18 +102,18 @@
 <!-- Content appended here -->
 <div class="franklin-content">
 
-<h1 class="post-title"><a href="/juliacon/2020/display-show-print/">JuliaCon 2020: <code>display</code>, <code>show</code> and <code>print</code> – how Julia's display system works</a></h1>
+<h1 class="post-title"><a href="/posts/2020/julia-for-scripting/">JuliaCon 2020: Julia for scripting</a></h1>
 
 <p>This is one of my presentations from JuliaCon 2020. The slides are available 
 <a href="slides" target="_blank">here</a>,
  and a recording of the talk is available 
-<a href="https://youtu.be/S1Fb5oNhhbc" target="_blank">here</a>.
+<a href="https://youtu.be/IuwxE3m0_QQ" target="_blank">here</a>.
 </p>
 <h2 id="abstract"><a href="#abstract">Abstract</a></h2>
-<p>When Julia finishes a computation and obtains a value the user is presented with the result. In the Julia REPL the result is usually represented as plain text. In other environments, such as in a Jupyter notebook, you sometimes see more rich representations, for example some values display as HTML, and others as images.</p>
-<p>The main functions responsible for output in Julia are <code>display</code> and <code>show</code>. Usually <code>display</code> is the first method to be called when an object is presented to the user. The <code>display</code> function is implemented by displays such as the Julia REPL, the IDE or the notebook interface. Next, <code>display</code> requests output from <code>show</code> with a specific so-called MIME-type. Which MIME-types that are requested depends on what output the display is able to present back to the user. For example, the REPL mostly works with the <code>text/plain</code> MIME-type, and the notebook display supports multiple additional MIME-types, for example <code>image/png</code> for image output, <code>text/html</code> for HTML output, and so on. Given this rough overview the display system might seem rather simple, but there are many hidden complexities.</p>
-<p>In order to take advantage of the rich display system and implement &quot;pretty printing&quot; for a custom type it is generally enough to implement methods of <code>show</code> with specific MIME-types. All types get a default text representation, but this can easily be overridden by implementing <code>show</code> with the <code>text/plain</code> MIME type. If the type can be represented in richer formats it is simple to add additional methods. For example, in order to support image output in a notebook it is enough to implement <code>show</code> with the <code>image/png</code> MIME type.</p>
-<p>This talk will present how Julia&#39;s display system works and go through the process of taking an output object and generating output to present the user with. The talk will also examplify this process by discussing how to customize the output for your own types.</p>
+<p>The &quot;scripting workflow&quot;, i.e. starting Julia, execute a code snippet, and then exit, is often not the recommended method for Julia code. One reason for this is that Julia is a just-in-time &#40;JIT&#41; compiled language, and the first call to a function is usually a lot slower than subsequent calls due to compilation. In a setting such as scripting there might only be one call to a function before exiting Julia. Spending time compiling the function might not be worth it in such a case, unless the faster runtime makes up for it. A simple example is a script that defines a single function, calls it, and then exits.</p>
+<p>The recommended Julia workflow is instead to keep a single Julia session alive for as long as possible, and reuse it for multiple tasks. Even though two tasks A and B are not directly related, they may both use, for example, arrays. Thus, after performing task A we have already compiled some array methods, and task B will benefit from that, with reduced compilation time as the result. This interaction is something that scripting can not take advantage of, since compiled methods are forgotten when exiting Julia.</p>
+<p>The problems presented above have two obvious possible solutions: &#40;i&#41; spend less time compiling and &#40;ii&#41; store compiled methods and make them available in future sessions. For the first option we can use Julias interpreter and only compile whats necessary. This is often a great solution for very short-running tasks, and requires nothing extra, just some command line flags to Julia. The second option is a bit more involved &#40;although nowadays pretty easy using the <a href="https://github.com/JuliaLang/PackageCompiler.jl">PackageCompiler.jl</a> package&#41;, however, it can completely elimitate runtime compilation. The downside is that the compiled and cached methods live in a separate file that needs to be bundled with the script.</p>
+<p>This talk will discuss how Julia can be used for scripting, present some tips and tricks on how to make scripting more viable, and show some succesful examples of the two solutions presented above.</p>
 </div><!-- CONTENT ENDS HERE -->
  
     </div>
