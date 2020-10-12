@@ -1213,3 +1213,6 @@ h1 code {
   width: 1em;
   vertical-align: -0.4rem;
 }
+.posts .post-item a .post-title:hover {
+  text-decoration: underline;
+}
