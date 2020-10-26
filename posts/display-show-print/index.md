@@ -12,11 +12,11 @@ tags = ["julia", "juliacon"]
 
 This is one of my presentations from JuliaCon 2020. The slides are available
 ~~~
-<a href="slides" target="_blank">here</a>,
+<a href="slides">here</a>,
 ~~~
 and a recording of the talk is available
 ~~~
-<a href="https://youtu.be/S1Fb5oNhhbc" target="_blank">here</a>.
+<a href="https://youtu.be/S1Fb5oNhhbc">here</a>.
 ~~~
 
 ## Abstract

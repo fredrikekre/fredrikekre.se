@@ -5,19 +5,12 @@ html_title = "JuliaCon 2019: <code>Pkg</code>, <code>Project.toml</code>, <code>
 var"layout-post" = nothing
 tags = ["julia", "juliacon"]
 +++
- 
+
 ~~~
 <h1><a href="{{ get_url }}">{{ fill html_title }}</a></h1>
 ~~~
 
-This is one of my presentations from JuliaCon 2019. The slides are available
-~~~
-<a href="https://docs.google.com/presentation/d/e/2PACX-1vT6XYlWB0bxAoRIz4wRG9nRGktugbTBAglNXHvOIUPfZhSSYaT5iXqfIn0ISaUjtyrXDw3Jk03PxVK8/pub?start=false&loop=false&delayms=3000" target="_blank">here</a>,
-~~~
-and a recording of the talk is available
-~~~
-<a href="https://youtu.be/q-LV4zoxc-E" target="_blank">here</a>.
-~~~
+This is one of my presentations from JuliaCon 2019. The slides are available [here](https://docs.google.com/presentation/d/e/2PACX-1vT6XYlWB0bxAoRIz4wRG9nRGktugbTBAglNXHvOIUPfZhSSYaT5iXqfIn0ISaUjtyrXDw3Jk03PxVK8/pub?start=false&loop=false&delayms=3000), and a recording of the talk is available [here](https://youtu.be/q-LV4zoxc-E).
 
 ## Abstract
 

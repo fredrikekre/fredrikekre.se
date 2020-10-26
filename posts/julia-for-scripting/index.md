@@ -9,14 +9,7 @@ tags = ["julia", "juliacon"]
 <h1><a href="{{ get_url }}">{{ fill title }}</a></h1>
 ~~~
 
-This is one of my presentations from JuliaCon 2020. The slides are available
-~~~
-<a href="slides" target="_blank">here</a>,
-~~~
-and a recording of the talk is available
-~~~
-<a href="https://youtu.be/IuwxE3m0_QQ" target="_blank">here</a>.
-~~~
+This is one of my presentations from JuliaCon 2020. The slides are available [here](slides), and a recording of the talk is available [here](https://youtu.be/IuwxE3m0_QQ).
 
 ## Abstract
 

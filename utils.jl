@@ -31,7 +31,7 @@ function social_icons()
         svg = Franklin.convert_html("{{ svg $(name) }}")
         svg = strip(svg)
         isempty(svg) && (@warn "could not find svg icon for social.$name, skipping"; continue)
-        aref = """&nbsp; <a href="$(url)" target="_blank" rel="noopener" title="$(name)">$(svg)</a> &nbsp;"""
+        aref = """&nbsp; <a href="$(url)" title="$(name)">$(svg)</a> &nbsp;"""
         println(io, aref)
     end
     println(io, "</div>")
