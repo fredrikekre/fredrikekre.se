@@ -182,3 +182,12 @@ end
 #     # -------------------------------------------
 #     return String(take!(c))
 # end
+
+let counter = 0
+    global function hfun_unique_id(n=nothing)
+        if n !== nothing
+            counter += 1
+        end
+        return "unique-id-$(counter)"
+    end
+end
