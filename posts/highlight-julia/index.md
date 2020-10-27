@@ -258,7 +258,7 @@ x = '\\'
 x = 'a' # reference
 }
 
-`!` is now allowed in variable names, and thus also recognized in the context of finding function definitions and function calls. In other contexts it is tagged as an operator:
+`!` is now allowed in variable names, and thus also recognized in the context of finding function definitions and function calls:
 \codetoggle{
 f!(x) = x
 f!(x)
