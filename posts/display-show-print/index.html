@@ -6,7 +6,7 @@
 
   
   
-  
+
   <meta name="theme-color" content="#ffffff" />
   <link rel="stylesheet" href="/css/hello-hermit.css">
 
@@ -23,7 +23,8 @@
   </title>
 </head>
 
-<body class="dark-theme">
+<body class="">
+<!-- <body class="dark-theme"> -->
 <div class="container">
 
 <header class="header">
@@ -74,9 +75,11 @@
 
 </span> <!-- header__inner -->
 </header>
+
+
 <div class="content">
 
- 
+
   <main class="post">
   <div class="post-info">
   <p style="display: flex; justify-content: space-between">
@@ -91,11 +94,11 @@
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg> <span class="tag"><a href="/tag/julia">julia</a></span><span class="tag"><a href="/tag/juliacon">juliacon</a></span>
   </p>
   </div>
-  
+
   <article>
 
   <div class="post-content">
- 
+
 
 <!-- Content appended here -->
 <div class="franklin-content">
@@ -103,9 +106,9 @@
 <h1><a href="/posts/display-show-print/">JuliaCon 2020: <code>display</code>, <code>show</code> and <code>print</code> – how Julia's display system works</a></h1>
 
 <p>This is one of my presentations from JuliaCon 2020. The slides are available 
-<a href="slides" target="_blank">here</a>,
+<a href="slides">here</a>,
  and a recording of the talk is available 
-<a href="https://youtu.be/S1Fb5oNhhbc" target="_blank">here</a>.
+<a href="https://youtu.be/S1Fb5oNhhbc">here</a>.
 </p>
 <h2 id="abstract"><a href="#abstract">Abstract</a></h2>
 <p>When Julia finishes a computation and obtains a value the user is presented with the result. In the Julia REPL the result is usually represented as plain text. In other environments, such as in a Jupyter notebook, you sometimes see more rich representations, for example some values display as HTML, and others as images.</p>
@@ -113,11 +116,10 @@
 <p>In order to take advantage of the rich display system and implement &quot;pretty printing&quot; for a custom type it is generally enough to implement methods of <code>show</code> with specific MIME-types. All types get a default text representation, but this can easily be overridden by implementing <code>show</code> with the <code>text/plain</code> MIME type. If the type can be represented in richer formats it is simple to add additional methods. For example, in order to support image output in a notebook it is enough to implement <code>show</code> with the <code>image/png</code> MIME type.</p>
 <p>This talk will present how Julia&#39;s display system works and go through the process of taking an output object and generating output to present the user with. The talk will also examplify this process by discussing how to customize the output for your own types.</p>
 </div><!-- CONTENT ENDS HERE -->
- 
+
     </div>
     </article>
     <hr>
-
 
 <!--
     <div class="post-info">
@@ -128,29 +130,31 @@
 
     </div>
 -->
-
     </main>
- 
+
 
 
     </div> <!-- <div class="content"> -->
+
     <footer class="footer">
-        <div class="footer__inner">
-            <div class="footer__content">
-                <span>&copy 2020 <a rel="author" href="/">Fredrik Ekre</a></span>
-                <span><a rel="license" href="/about/#license">License</a></span>
-                <span><a href="/about/#privacy_policy">Privacy Policy</a></span>
-            </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy 2020 <a rel="author" href="/">Fredrik Ekre</a></span>
+            <span><a rel="license" href="/about/#license">License</a></span>
+            <span><a href="/about/#privacy_policy">Privacy Policy</a></span>
         </div>
-        <div class="footer__inner">
-            <div class="footer__content">
-                <span>Website built with <a href="https://franklinjl.org/" target="_blank" rel="noopener">Franklin.jl</a></span>
-            </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Website built with <a href="https://franklinjl.org/">Franklin.jl</a></span>
         </div>
-    </footer>
+    </div>
+</footer>
+
 
     
     
+
     <script src="/libs/hello-hermit.js"></script>
 
     </div> <!-- container -->

@@ -6,7 +6,7 @@
 
   
   
-  
+
   <meta name="theme-color" content="#ffffff" />
   <link rel="stylesheet" href="/css/hello-hermit.css">
 
@@ -23,7 +23,8 @@
   </title>
 </head>
 
-<body class="dark-theme">
+<body class="">
+<!-- <body class="dark-theme"> -->
 <div class="container">
 
 <header class="header">
@@ -74,9 +75,11 @@
 
 </span> <!-- header__inner -->
 </header>
+
+
 <div class="content">
 
- 
+
   <main class="post">
   <div class="post-info">
   <p style="display: flex; justify-content: space-between">
@@ -91,33 +94,28 @@
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg> <span class="tag"><a href="/tag/julia">julia</a></span><span class="tag"><a href="/tag/juliacon">juliacon</a></span>
   </p>
   </div>
-  
+
   <article>
 
   <div class="post-content">
- 
+
 
 <!-- Content appended here -->
 <div class="franklin-content">
 
 <h1><a href="/posts/pkg-project-manifest-environments/">JuliaCon 2019: <code>Pkg</code>, <code>Project.toml</code>, <code>Manifest.toml</code> and Environments</a></h1>
 
-<p>This is one of my presentations from JuliaCon 2019. The slides are available 
-<a href="https://docs.google.com/presentation/d/e/2PACX-1vT6XYlWB0bxAoRIz4wRG9nRGktugbTBAglNXHvOIUPfZhSSYaT5iXqfIn0ISaUjtyrXDw3Jk03PxVK8/pub?start=false&loop=false&delayms=3000" target="_blank">here</a>,
- and a recording of the talk is available 
-<a href="https://youtu.be/q-LV4zoxc-E" target="_blank">here</a>.
-</p>
+<p>This is one of my presentations from JuliaCon 2019. The slides are available <a href="https://docs.google.com/presentation/d/e/2PACX-1vT6XYlWB0bxAoRIz4wRG9nRGktugbTBAglNXHvOIUPfZhSSYaT5iXqfIn0ISaUjtyrXDw3Jk03PxVK8/pub?start&#61;false&amp;loop&#61;false&amp;delayms&#61;3000">here</a>, and a recording of the talk is available <a href="https://youtu.be/q-LV4zoxc-E">here</a>.</p>
 <h2 id="abstract"><a href="#abstract">Abstract</a></h2>
 <p>Julia&#39;s new package manager, <a href="https://github.com/JuliaLang/Pkg.jl"><code>Pkg</code></a> &#40;codename <code>Pkg3</code>&#41;, was released together with version 1.0 of the Julia language. The new package manager is a complete rewrite of the old one, and solves many of the problems observed in the old version. One major feature of the new package manager is the concept of <em>package environments</em>, which can be described as independent, sandboxed, sets of packages.</p>
 <p>A package environment is represented by a <code>Project.toml</code> and <code>Manifest.toml</code> file pair. These files keep track of what packages, and what versions, are available in a given environment. Since environments are &quot;cheap&quot;, just two files, they can be used liberally. It is often useful to create new environments for every new coding project, instead of installing packages on the global level. Since the package manager modifies the current project, e.g. when adding, removing or updating packages, there is no risk for these operations to mess up other environments.</p>
 <p>The fact that exact versions of packages in the environment is being recorded means that Julia has reproducibility built-in. As long as the <code>Project.toml</code> and <code>Manifest.toml</code> file pair is available it is possible to replicate exactly the same package environment. Some typical use cases include being able to replicate the same package environment on a different machine, and being able to go back in time and run some old code which might require some old versions of packages.</p>
 <p>In this presentation we will discuss how environments work, how they interact with the package manager and Julia&#39;s code loading, and how to effectively use them. Hopefully you will be more comfortable working with, and seeing the usefulness of, environments after this presentation.</p>
 </div><!-- CONTENT ENDS HERE -->
- 
+
     </div>
     </article>
     <hr>
-
 
 <!--
     <div class="post-info">
@@ -128,29 +126,31 @@
 
     </div>
 -->
-
     </main>
- 
+
 
 
     </div> <!-- <div class="content"> -->
+
     <footer class="footer">
-        <div class="footer__inner">
-            <div class="footer__content">
-                <span>&copy 2020 <a rel="author" href="/">Fredrik Ekre</a></span>
-                <span><a rel="license" href="/about/#license">License</a></span>
-                <span><a href="/about/#privacy_policy">Privacy Policy</a></span>
-            </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy 2020 <a rel="author" href="/">Fredrik Ekre</a></span>
+            <span><a rel="license" href="/about/#license">License</a></span>
+            <span><a href="/about/#privacy_policy">Privacy Policy</a></span>
         </div>
-        <div class="footer__inner">
-            <div class="footer__content">
-                <span>Website built with <a href="https://franklinjl.org/" target="_blank" rel="noopener">Franklin.jl</a></span>
-            </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Website built with <a href="https://franklinjl.org/">Franklin.jl</a></span>
         </div>
-    </footer>
+    </div>
+</footer>
+
 
     
     
+
     <script src="/libs/hello-hermit.js"></script>
 
     </div> <!-- container -->

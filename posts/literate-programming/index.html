@@ -6,7 +6,7 @@
 
   
   
-  
+
   <meta name="theme-color" content="#ffffff" />
   <link rel="stylesheet" href="/css/hello-hermit.css">
 
@@ -23,7 +23,8 @@
   </title>
 </head>
 
-<body class="dark-theme">
+<body class="">
+<!-- <body class="dark-theme"> -->
 <div class="container">
 
 <header class="header">
@@ -74,9 +75,11 @@
 
 </span> <!-- header__inner -->
 </header>
+
+
 <div class="content">
 
- 
+
   <main class="post">
   <div class="post-info">
   <p style="display: flex; justify-content: space-between">
@@ -91,33 +94,28 @@
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg> <span class="tag"><a href="/tag/julia">julia</a></span><span class="tag"><a href="/tag/juliacon">juliacon</a></span>
   </p>
   </div>
-  
+
   <article>
 
   <div class="post-content">
- 
+
 
 <!-- Content appended here -->
 <div class="franklin-content">
 
 <h1><a href="/posts/literate-programming/">JuliaCon 2019: Literate programming with <code>Literate.jl</code></a></h1>
 
-<p>This is one of my presentations from JuliaCon 2019. The slides are available 
-<a href="slides" target="_blank">here</a>,
- and a recording of the talk is available 
-<a href="https://youtu.be/Tfp1WEdYfqk" target="_blank">here</a>.
-</p>
+<p>This is one of my presentations from JuliaCon 2019. The slides are available <a href="slides">here</a>, and a recording of the talk is available <a href="https://youtu.be/Tfp1WEdYfqk">here</a>.</p>
 <h2 id="abstract"><a href="#abstract">Abstract</a></h2>
 <p>Literate programming was introduced by Donald Knuth in 1984 and is described as an <em>explanation of the program logic in a natural language, interspersed with traditional source code</em>. <a href="https://github.com/fredrikekre/Literate.jl"><code>Literate.jl</code></a> is a simple Julia package that can be used for literate programming. The original purpose was to facilitate writing example programs for documenting Julia packages.</p>
 <p>Julia packages are often showcased and documented using &quot;example notebooks&quot;. Notebooks are great for this purpose since they contain both input source code, descriptive markdown and rich output like plots and figures, and, from the description above, notebooks can be considered a form of literate programming. One downside with notebooks is that they are a pain to deal with in version control systems like git, since they contain lots of extra data. A small change to the notebook thus often results in a large and complicated diff, which makes it harder to review the actual changes. Another downside is that notebooks require external tools, like <a href="https://jupyter.org/">Jupyter</a> and <a href="https://github.com/JuliaLang/IJulia.jl"><code>IJulia.jl</code></a> to be used effectively.</p>
 <p>With <code>Literate.jl</code> is is possible to dynamically generate notebooks from a simple source file. The source file is a regular <code>.jl</code> file, where comments are used for describing the interspersed code snippets. This means that, for basic usage, there are no new syntax to learn in order to use <code>Literate.jl</code>, basically any valid Julia source file can be used as a source file. This solves the problem with notebooks described in the previous section, since the notebook itself does not need to be checked into version control – it is just the source text file that is needed. <code>Literate.jl</code> can also, from the <em>same</em> input source file, generate markdown files to be used with e.g. <a href="https://github.com/JuliaDocs/Documenter.jl"><code>Documenter.jl</code></a> to produce HTML pages in the package documentation. This makes it easy to maintain both a notebook and HTML version of examples, since they are based on the same source file.</p>
 <p>This presentation will briefly cover the <code>Literate.jl</code> syntax, and show examples of how <code>Literate.jl</code> can be used.</p>
 </div><!-- CONTENT ENDS HERE -->
- 
+
     </div>
     </article>
     <hr>
-
 
 <!--
     <div class="post-info">
@@ -128,29 +126,31 @@
 
     </div>
 -->
-
     </main>
- 
+
 
 
     </div> <!-- <div class="content"> -->
+
     <footer class="footer">
-        <div class="footer__inner">
-            <div class="footer__content">
-                <span>&copy 2020 <a rel="author" href="/">Fredrik Ekre</a></span>
-                <span><a rel="license" href="/about/#license">License</a></span>
-                <span><a href="/about/#privacy_policy">Privacy Policy</a></span>
-            </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy 2020 <a rel="author" href="/">Fredrik Ekre</a></span>
+            <span><a rel="license" href="/about/#license">License</a></span>
+            <span><a href="/about/#privacy_policy">Privacy Policy</a></span>
         </div>
-        <div class="footer__inner">
-            <div class="footer__content">
-                <span>Website built with <a href="https://franklinjl.org/" target="_blank" rel="noopener">Franklin.jl</a></span>
-            </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Website built with <a href="https://franklinjl.org/">Franklin.jl</a></span>
         </div>
-    </footer>
+    </div>
+</footer>
+
 
     
     
+
     <script src="/libs/hello-hermit.js"></script>
 
     </div> <!-- container -->

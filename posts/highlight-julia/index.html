@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+   <!-- <link rel="stylesheet" href="/libs/highlight/github.min.css"> -->
+<link rel="stylesheet" href="/libs/highlight/gruvbox-dark.css">
+   
+
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="stylesheet" href="/css/hello-hermit.css">
+
+  <!-- TODO move this out -->
+  <title>
+    
+        
+          Improved syntax highlighting for Julia on the web |
+        
+    
+    
+      Fredrik Ekre
+    
+  </title>
+</head>
+
+<body class="">
+<!-- <body class="dark-theme"> -->
+<div class="container">
+
+<header class="header">
+<span class="header__inner">
+
+<!-- Logo/home button -->
+<a href="/" style="text-decoration: none;">
+<div class="logo">
+  <span class="logo__mark">
+     $ 
+    
+  </span>
+  <span class="logo__text">
+     cd /home/fredrik 
+    
+  </span>
+  <span class="logo__cursor" style=" "></span>
+</div>
+</a>
+
+<span class="header__right">
+  <!-- Navigation bar -->
+  <nav class="menu">
+    <ul class="menu__inner">
+      
+        <li><a href="/posts/">Posts</a></li>
+      
+        <li><a href="/about/">About</a></li>
+      
+      <!-- {{ generate_menu nothing }} -->
+    </ul>
+  </nav>
+  <!-- Theme changer -->
+  <span class="menu-trigger hidden">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M0 0h24v24H0z" fill="none"></path>
+      <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+    </svg>
+  </span>
+  <span class="theme-toggle unselectable">
+    <svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+      3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+      13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"></path>
+    </svg>
+  </span>
+</span><!-- header__right -->
+
+</span> <!-- header__inner -->
+</header>
+
+
+<div class="content">
+
+
+  <main class="post">
+  <div class="post-info">
+  <p style="display: flex; justify-content: space-between">
+  <span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 11 minutes
+  </span>
+  <span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 2020-10-27
+  </span>
+  </p>
+  <p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg> <span class="tag"><a href="/tag/highlight.js">highlight.js</a></span><span class="tag"><a href="/tag/javascript">javascript</a></span><span class="tag"><a href="/tag/julia">julia</a></span><span class="tag"><a href="/tag/open source">open source</a></span>
+  </p>
+  </div>
+
+  <article>
+
+  <div class="post-content">
+
+
+<!-- Content appended here -->
+<div class="franklin-content">
+
+<h1><a href="/posts/highlight-julia/">Improved syntax highlighting for Julia on the web</a></h1>
+
+<p>In the process of writing another post I looked into how to properly syntax highlight Julia code on a website like this. The static site generator <a href="https://franklinjl.org/">Franklin.jl</a>, used for this website, enables syntax highlighting using the JavaScript library <a href="https://highlightjs.org/">highlight.js</a>. However, I wasn&#39;t quite happy with the result so I decided to spend the weekend trying to improve it<sup>not a conscious decision, I spent way too much time on this...</sup>. Highlight.js is also used by many other tools, for example: <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a>, the documentation generator used by Julia and a majority of the package ecosystem; <a href="https://www.discourse.org/">Discourse</a>, the platform hosting Julia&#39;s <a href="https://discourse.julialang.org/">discussion forum</a>; and <a href="https://stackoverflow.com/questions/tagged/julia">StackOverflow</a>. My hope is that the improvements presented in this post will eventually reach those platforms, among others, and benefit readers of Julia code everywhere.</p>
+<p>I am not sure this post is of general interest – it merely presents the changes that I made – but, since I had almost all content written already for debugging my poor JavaScript coding, I decided to do some finishing touches and publish it. In hindsight it was probably a good idea since I found numerous corner cases that wasn&#39;t handled correctly.</p>
+<h2 id="tldr_highlightjs"><a href="#tldr_highlightjs">TL;DR: highlight.js</a></h2>
+<p>Before continuing I think it is good to have a basic overview of what highlight.js does. At the core highlight.js is a &quot;labeler&quot; which, given a snippet of code, tries to label all the words/operators/symbols/etc with an appropriate tag. The tags are language agnostic categories such as <code>keyword</code>, <code>number</code>, <code>string</code>, <code>literal</code>, etc. The full list, and their intended usage can be seen <a href="https://highlightjs.readthedocs.io/en/latest/css-classes-reference.html">here</a>. The labeling is done using regular expressions, with the help of some language specific rules and lists of keywords. Given that it is not a full fledged parser it can be tricky to correctly label everything.</p>
+<p>When everything has been labeled it is just a matter of selecting a color scheme that assigns color and/or text style to each tag. There are a bunch of styles available on the <a href="https://highlightjs.org/static/demo/">demo page</a>. For this post I use a modified version of the <code>Gruvbox Dark</code> theme. Since the number of tags is limited it is also very easy to create your own theme, or, as I did for this post, modify an existing one.</p>
+<p><em>The focus for the rest of the post is on the tagging itself and not the specific styling.</em> Consider using your browsers developer tools to inspect the code snippets to better understand which patterns in the code are being tagged, and with which tag the are labeled with.</p>
+<h2 id="status_quo"><a href="#status_quo">Status Quo</a></h2>
+<p>Lets look at an example comparing Julia with C using the current release of highlight.js &#40;version 10.3.1&#41;:</p>
+<pre><code class="julia-old hljs"><span class="hljs-keyword">function</span> main(who::<span class="hljs-built_in">Union</span>{<span class="hljs-built_in">String</span>,Nothing} = <span class="hljs-literal">nothing</span>)
+    <span class="hljs-keyword">if</span> who === <span class="hljs-literal">nothing</span>
+        who = <span class="hljs-string">&quot;world&quot;</span>
+    <span class="hljs-keyword">end</span>
+    print(stdout, <span class="hljs-string">&quot;hello, <span class="hljs-subst">$(who)</span>!\n&quot;</span>)
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">nothing</span>
+<span class="hljs-keyword">end</span></code></pre>
+<pre><code class="c hljs"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])</span> </span>{
+    <span class="hljs-keyword">char</span> *who = <span class="hljs-string">&quot;world&quot;</span>;
+    <span class="hljs-keyword">if</span> (argc &gt; <span class="hljs-number">1</span>) {
+        who = argv[<span class="hljs-number">1</span>];
+    }
+    <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stdout</span>, <span class="hljs-string">&quot;hello, %s!\n&quot;</span>, who);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}</code></pre>
+<p>Overall the Julia output is quite good for this example: keywords such as <code>function</code>, <code>if</code>, <code>return</code> and <code>end</code> are tagged as keywords; strings are recognized as <code>string</code>s; <code>nothing</code> is tagged as <code>literal</code>; and string interpolation is tagged as <code>subst</code>. However, when looking into the details, and in particular when comparing to the C example, it is evident that the syntax highlighter for Julia is not as sophisticated as the one for C. In particular, the C highlighter recognized <code>int main&#40;int argc, char *argv&#91;&#93;&#41;</code> as a function definition &#40;tagged as <code>function</code>&#41; with <code>main</code> tagged as <code>title</code> and <code>argc</code>, <code>*argv&#91;&#93;</code> tagged as <code>params</code> – surely the same can be achieved for Julia too&#33;</p>
+<p>You might also note that <code>Nothing</code> was not recognized in the Julia example. This turned out to be because the internal lists of keyword and constants had not been updated in some time. Updating these was purely a mechanical task and the patch is in fact already <a href="https://github.com/highlightjs/highlight.js/pull/2781">merged upstream</a>.</p>
+<h2 id="improvements_to_the_julia_syntax_highlighter"><a href="#improvements_to_the_julia_syntax_highlighter">Improvements to the Julia syntax highlighter</a></h2>
+<p>Enough talking – on to the fun stuff&#33; The sections below simply demonstrates all the changes that I made, with some comments. Every code snippet can be toggled in their upper right corner to compare with the &quot;old&quot; highlighting. Once again I encourage you to inspect the snippets using the browser developer tools, it can be quite informative&#33;</p>
+<h3 id="infix_operators_and_assignment"><a href="#infix_operators_and_assignment">Infix operators and assignment</a></h3>
+<p>Infix operators and assignment are now tagged. Assignment and the short-circuiting control-flow operators <code>&amp;&amp;</code> and <code>||</code> are tagged as <code>keyword</code>:</p>
+
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-1" type="checkbox" checked=true">
+<label for="unique-id-1" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs">x <span class="hljs-keyword">=</span> y <span class="hljs-keyword">&amp;&amp;</span> (z <span class="hljs-keyword">||</span> q)</code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">x = y &amp;&amp; (z || q)</code></pre>
+</div>
+</div>
+
+<p>Initially I had all operators tagged as <code>keyword</code>, since this is what many other highlighters do, but I settled on tagging them as <code>built_in</code>:</p>
+
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-2" type="checkbox" checked=true">
+<label for="unique-id-2" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs">x <span class="hljs-built_in">+</span> y    x <span class="hljs-built_in">-</span> y    x <span class="hljs-built_in">*</span> y    x <span class="hljs-built_in">≤</span> y    x <span class="hljs-built_in">∈</span> y    x <span class="hljs-built_in">⊗</span> y
+x <span class="hljs-built_in">==</span> y   x <span class="hljs-built_in">&lt;=</span> y   x <span class="hljs-built_in">&gt;=</span> y   x <span class="hljs-built_in">!=</span> y   x <span class="hljs-built_in">===</span> y  x <span class="hljs-built_in">!==</span> y</code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">x + y    x - y    x * y    x ≤ y    x ∈ y    x ⊗ y
+x == y   x &lt;= y   x &gt;= y   x != y   x === y  x !== y</code></pre>
+</div>
+</div>
+
+<p>Tagging assignment and operators differently has the extra benefit of making it clear that <em>update-and-assign</em> operators really are two things:</p>
+
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-3" type="checkbox" checked=true">
+<label for="unique-id-3" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs">x <span class="hljs-built_in">+</span><span class="hljs-keyword">=</span> y    x <span class="hljs-built_in">-</span><span class="hljs-keyword">=</span> y    x <span class="hljs-built_in">*</span><span class="hljs-keyword">=</span> y    x <span class="hljs-built_in">//</span><span class="hljs-keyword">=</span> y    x <span class="hljs-built_in">/</span><span class="hljs-keyword">=</span> y
+x <span class="hljs-built_in">\</span><span class="hljs-keyword">=</span> y    x <span class="hljs-built_in">^</span><span class="hljs-keyword">=</span> y    x <span class="hljs-built_in">÷</span><span class="hljs-keyword">=</span> y    x <span class="hljs-built_in">%</span><span class="hljs-keyword">=</span> y     x <span class="hljs-built_in">&lt;&lt;</span><span class="hljs-keyword">=</span> y
+x <span class="hljs-built_in">&gt;&gt;&gt;</span><span class="hljs-keyword">=</span> y  x <span class="hljs-built_in">&gt;&gt;</span><span class="hljs-keyword">=</span> y   x <span class="hljs-built_in">&amp;</span><span class="hljs-keyword">=</span> y    x <span class="hljs-built_in">⊻</span><span class="hljs-keyword">=</span> y</code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">x += y    x -= y    x *= y    x //= y    x /= y
+x \= y    x ^= y    x ÷= y    x %= y     x &lt;&lt;= y
+x &gt;&gt;&gt;= y  x &gt;&gt;= y   x &amp;= y    x ⊻= y</code></pre>
+</div>
+</div>
+
+<h3 id="contextual_highlighting_of_types"><a href="#contextual_highlighting_of_types">Contextual highlighting of types</a></h3>
+<p>Highlight.js has a predefined list of types associated with the <code>julia</code> language. This include, for example, <code>String</code>, <code>Int</code>, <code>Vector</code> and <code>Union</code>. When these words are encountered they are tagged with the <code>type</code> tag &#40;previously mislabeled with the <code>built_in</code> tag&#41;. In Julia, however, user-defined types are first class citizens, and usually there is no point in distinguishing them from the built-in types. Obviously the highlighter can not be taught to recognize all types out there, but in Julia there are certain context in which the content must be types. By teaching the highlighter about these contexts it is possible to unconditionally tag it with the <code>type</code> tag.</p>
+<p>Here are some examples of such contexts. Note, in particular, that the user-defined type <code>UserType</code> is correctly tagged.</p>
+<p>Any word directly attached to <code>&#123;...&#125;</code>: 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-4" type="checkbox" checked=true">
+<label for="unique-id-4" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs">x <span class="hljs-keyword">=</span> <span class="hljs-type">Vector{Int}</span>
+x <span class="hljs-keyword">=</span> <span class="hljs-type">UserType{Int}</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">x = <span class="hljs-built_in">Vector</span>{<span class="hljs-built_in">Int</span>}
+x = UserType{<span class="hljs-built_in">Int</span>}</code></pre>
+</div>
+</div>
+</p>
+<p>Right hand side of <code>::</code> 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-5" type="checkbox" checked=true">
+<label for="unique-id-5" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs">x<span class="hljs-built_in">::</span><span class="hljs-type">Int</span>
+x<span class="hljs-built_in">::</span><span class="hljs-type">UserType</span>
+x<span class="hljs-built_in">::</span><span class="hljs-type">Union{String, Nothing}</span>
+x<span class="hljs-built_in">::</span><span class="hljs-type">AbstractArray{UserType, 3}</span>
+x<span class="hljs-built_in">::</span><span class="hljs-type">AbstractArray{<span class="hljs-type">UserType{T}</span>, 3}</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">x::<span class="hljs-built_in">Int</span>
+x::UserType
+x::<span class="hljs-built_in">Union</span>{<span class="hljs-built_in">String</span>, Nothing}
+x::<span class="hljs-built_in">AbstractArray</span>{UserType, <span class="hljs-number">3</span>}
+x::<span class="hljs-built_in">AbstractArray</span>{UserType{T}, <span class="hljs-number">3</span>}</code></pre>
+</div>
+</div>
+</p>
+<p>Right and left hand side of <code>&lt;:</code> and <code>&gt;:</code> 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-6" type="checkbox" checked=true">
+<label for="unique-id-6" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs"><span class="hljs-type">Int</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">String</span>
+<span class="hljs-type">Int</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">UserType</span>
+<span class="hljs-type">UserType</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">String</span>
+
+<span class="hljs-type">Int</span> <span class="hljs-built_in">&gt;:</span> <span class="hljs-type">String</span>
+<span class="hljs-type">Int</span> <span class="hljs-built_in">&gt;:</span> <span class="hljs-type">UserType</span>
+<span class="hljs-type">UserType</span> <span class="hljs-built_in">&gt;:</span> <span class="hljs-type">String</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs"><span class="hljs-built_in">Int</span> &lt;: <span class="hljs-built_in">String</span>
+<span class="hljs-built_in">Int</span> &lt;: UserType
+UserType &lt;: <span class="hljs-built_in">String</span>
+
+<span class="hljs-built_in">Int</span> &gt;: <span class="hljs-built_in">String</span>
+<span class="hljs-built_in">Int</span> &gt;: UserType
+UserType &gt;: <span class="hljs-built_in">String</span></code></pre>
+</div>
+</div>
+</p>
+<p>After <code>where</code>: 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-7" type="checkbox" checked=true">
+<label for="unique-id-7" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs"><span class="hljs-type">Vector{Int}</span> <span class="hljs-keyword">where</span> <span class="hljs-type">Int</span>
+<span class="hljs-type">Vector{UserType}</span> <span class="hljs-keyword">where</span> <span class="hljs-type">UserType</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs"><span class="hljs-built_in">Vector</span>{<span class="hljs-built_in">Int</span>} <span class="hljs-keyword">where</span> <span class="hljs-built_in">Int</span>
+<span class="hljs-built_in">Vector</span>{UserType} <span class="hljs-keyword">where</span> UserType</code></pre>
+</div>
+</div>
+</p>
+<p>Fortunately the contexts above should cover the vast majority of cases – while types sometimes show up in other contexts it is not very common. The list of built-ins keyword is still useful in other contexts, for example in 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-8" type="checkbox" checked=true">
+<label for="unique-id-8" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs">x <span class="hljs-keyword">=</span> UserType
+x <span class="hljs-keyword">=</span> <span class="hljs-type">UserType{T}</span>
+x <span class="hljs-keyword">=</span> <span class="hljs-type">Vector</span>
+x <span class="hljs-keyword">=</span> <span class="hljs-type">Vector{T}</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">x = UserType
+x = UserType{T}
+x = <span class="hljs-built_in">Vector</span>
+x = <span class="hljs-built_in">Vector</span>{T}</code></pre>
+</div>
+</div>
+ it is difficult to tell if the lonely <code>UserType</code> is a type or a regular variable, but <code>Vector</code> is still tagged. However, using a pre-defined list is not always correct either, since Julia allows for things like this: 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-9" type="checkbox" checked=true">
+<label for="unique-id-9" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs"><span class="hljs-type">Vector</span> <span class="hljs-keyword">=</span> <span class="hljs-number">123</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs"><span class="hljs-built_in">Vector</span> = <span class="hljs-number">123</span></code></pre>
+</div>
+</div>
+</p>
+<p>where <code>Vector</code> is wrongly tagged. Perhaps contextual highlighting has sufficiently good coverage that the pre-defined list should be ignored completely?</p>
+<h3 id="type_definitions"><a href="#type_definitions">Type definitions</a></h3>
+<p>Type names are tagged as <code>class</code>, here are some examples: 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-10" type="checkbox" checked=true">
+<label for="unique-id-10" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs"><span class="hljs-keyword">struct</span> <span class="hljs-class">Struct</span>
+    x<span class="hljs-built_in">::</span><span class="hljs-type">Int</span>
+    y<span class="hljs-built_in">::</span><span class="hljs-type">Union{String,UserType}</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">struct</span> <span class="hljs-class">Struct</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">AbstractStruct</span>
+    x<span class="hljs-built_in">::</span><span class="hljs-type">Int</span>
+    y<span class="hljs-built_in">::</span><span class="hljs-type">UserType</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">struct</span> <span class="hljs-class">Struct{T}</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">AbstractStruct{T}</span>
+    x<span class="hljs-built_in">::</span><span class="hljs-type">Int</span>
+    y<span class="hljs-built_in">::</span><span class="hljs-type">Union{String,UserType}</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">mutable struct</span> <span class="hljs-class">MutableStruct</span>
+    x<span class="hljs-built_in">::</span><span class="hljs-type">UserType</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">mutable struct</span> <span class="hljs-class">MutableStruct{T}</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">AbstractVector{T}</span>
+    x<span class="hljs-built_in">::</span><span class="hljs-type">String</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">abstract type</span> <span class="hljs-class">AbstractType</span> <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">abstract type</span> <span class="hljs-class">A{T}</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">AbstractVector{T}</span> <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">abstract type</span> <span class="hljs-class">AbstractType</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">Integer</span> <span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">primitive type</span> <span class="hljs-class">PrimitiveType</span> <span class="hljs-number">32</span> <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">primitive type</span> <span class="hljs-class">PrimitiveType</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">Integer</span> <span class="hljs-number">8</span> <span class="hljs-keyword">end</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs"><span class="hljs-keyword">struct</span> Struct
+    x::<span class="hljs-built_in">Int</span>
+    y::<span class="hljs-built_in">Union</span>{<span class="hljs-built_in">String</span>,UserType}
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">struct</span> Struct &lt;: AbstractStruct
+    x::<span class="hljs-built_in">Int</span>
+    y::UserType
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">struct</span> Struct{T} &lt;: AbstractStruct{T}
+    x::<span class="hljs-built_in">Int</span>
+    y::<span class="hljs-built_in">Union</span>{<span class="hljs-built_in">String</span>,UserType}
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">mutable struct</span> MutableStruct
+    x::UserType
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">mutable struct</span> MutableStruct{T} &lt;: <span class="hljs-built_in">AbstractVector</span>{T}
+    x::<span class="hljs-built_in">String</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">abstract type</span> AbstractType <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">abstract type</span> A{T} &lt;: <span class="hljs-built_in">AbstractVector</span>{T} <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">abstract type</span> AbstractType &lt;: <span class="hljs-built_in">Integer</span> <span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">primitive type</span> PrimitiveType <span class="hljs-number">32</span> <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">primitive type</span> PrimitiveType &lt;: <span class="hljs-built_in">Integer</span> <span class="hljs-number">8</span> <span class="hljs-keyword">end</span></code></pre>
+</div>
+</div>
+</p>
+<p>Note that the contextual highlighting of types does a great job here – it correctly found all the types&#33;</p>
+<h3 id="function_definitions"><a href="#function_definitions">Function definitions</a></h3>
+<p>Function names in function definitions are tagged as <code>title</code>, and the function parameters are tagged as <code>params</code>:</p>
+
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-11" type="checkbox" checked=true">
+<label for="unique-id-11" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs"><span class="hljs-keyword">function </span><span class="hljs-title">sayhi</span>(<span class="hljs-params">who</span><span class="hljs-built_in">::</span><span class="hljs-type">String</span> <span class="hljs-keyword">=</span> <span class="hljs-string">&quot;world&quot;</span>)
+    <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;hello, &quot;</span> who)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">function </span><span class="hljs-title">sayhi</span>(<span class="hljs-params">who</span><span class="hljs-built_in">::</span><span class="hljs-type">T</span>) <span class="hljs-keyword">where</span> <span class="hljs-type">T</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">AbstractString</span>
+    <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;hello, &quot;</span> who)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">function </span>Base<span class="hljs-built_in">.</span><span class="hljs-title">print</span>(<span class="hljs-params">who</span><span class="hljs-built_in">::</span><span class="hljs-type">T</span>) <span class="hljs-keyword">where</span> <span class="hljs-type">T</span>
+    <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;hello, &quot;</span> who)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-title">saybye</span>(<span class="hljs-params">who</span><span class="hljs-built_in">::</span><span class="hljs-type">String</span> <span class="hljs-keyword">=</span> <span class="hljs-string">&quot;world&quot;</span>) <span class="hljs-keyword">=</span> <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;goodbye, &quot;</span>, who)
+<span class="hljs-title">saybye</span>(<span class="hljs-params">who</span><span class="hljs-built_in">::</span><span class="hljs-type">T</span>) <span class="hljs-keyword">where</span> <span class="hljs-type">T</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">AbstractString</span> <span class="hljs-keyword">=</span> <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;goodbye, &quot;</span>, who)
+Base<span class="hljs-built_in">.</span><span class="hljs-title">print</span>(<span class="hljs-params">who</span><span class="hljs-built_in">::</span><span class="hljs-type">T</span>) <span class="hljs-keyword">where</span> <span class="hljs-type">T</span> <span class="hljs-keyword">=</span> <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;goodbye, &quot;</span>, who)</code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs"><span class="hljs-keyword">function</span> sayhi(who::<span class="hljs-built_in">String</span> = <span class="hljs-string">&quot;world&quot;</span>)
+    println(<span class="hljs-string">&quot;hello, &quot;</span> who)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">function</span> sayhi(who::T) <span class="hljs-keyword">where</span> T &lt;: <span class="hljs-built_in">AbstractString</span>
+    println(<span class="hljs-string">&quot;hello, &quot;</span> who)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">function</span> Base.print(who::T) <span class="hljs-keyword">where</span> T
+    println(<span class="hljs-string">&quot;hello, &quot;</span> who)
+<span class="hljs-keyword">end</span>
+
+saybye(who::<span class="hljs-built_in">String</span> = <span class="hljs-string">&quot;world&quot;</span>) = println(<span class="hljs-string">&quot;goodbye, &quot;</span>, who)
+saybye(who::T) <span class="hljs-keyword">where</span> T &lt;: <span class="hljs-built_in">AbstractString</span> = println(<span class="hljs-string">&quot;goodbye, &quot;</span>, who)
+Base.print(who::T) <span class="hljs-keyword">where</span> T = println(<span class="hljs-string">&quot;goodbye, &quot;</span>, who)</code></pre>
+</div>
+</div>
+
+<p>Typed constructors are also tagged as function definitions</p>
+
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-12" type="checkbox" checked=true">
+<label for="unique-id-12" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs"><span class="hljs-keyword">struct</span> <span class="hljs-class">MyStruct{T}</span>
+    x<span class="hljs-built_in">::</span><span class="hljs-type">T</span>
+    <span class="hljs-keyword">function </span><span class="hljs-title">MyStruct</span>(<span class="hljs-params">x</span><span class="hljs-built_in">::</span><span class="hljs-type">T</span>) <span class="hljs-keyword">where</span> <span class="hljs-type">T</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new{T}</span>(x)
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">function </span><span class="hljs-title">MyStruct{T}</span>(<span class="hljs-params">x</span>) <span class="hljs-keyword">where</span> <span class="hljs-type">T</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span>(x)
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs"><span class="hljs-keyword">struct</span> MyStruct{T}
+    x::T
+    <span class="hljs-keyword">function</span> MyStruct(x::T) <span class="hljs-keyword">where</span> T
+        <span class="hljs-keyword">return</span> new{T}(x)
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-keyword">function</span> MyStruct{T}(x) <span class="hljs-keyword">where</span> T
+        <span class="hljs-keyword">return</span> new(x)
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span></code></pre>
+</div>
+</div>
+
+<h3 id="function_calls"><a href="#function_calls">Function calls</a></h3>
+<p>The name of functions that are called is tagged with <code>built_in</code>. Technically not all functions are &quot;built-in&quot;s, of course, but I like that they are tagged regardless of who happened to define them; the core language, a package or me. It also finds function calls when broadcasting. Example:</p>
+
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-13" type="checkbox" checked=true">
+<label for="unique-id-13" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs"><span class="hljs-built_in">sayhi</span>(<span class="hljs-string">&quot;world&quot;</span>)
+<span class="hljs-built_in">sayhi</span><span class="hljs-built_in">.</span>([<span class="hljs-string">&quot;world&quot;</span>, <span class="hljs-string">&quot;mom&quot;</span>])</code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">sayhi(<span class="hljs-string">&quot;world&quot;</span>)
+sayhi.([<span class="hljs-string">&quot;world&quot;</span>, <span class="hljs-string">&quot;mom&quot;</span>])</code></pre>
+</div>
+</div>
+
+<h3 id="miscellaneous"><a href="#miscellaneous">Miscellaneous</a></h3>
+<p>Here is a list of miscellaneous minor changes and bugfixes that I found while working on the rest.</p>
+<p>Literal regular expressions, <code>r&quot;...&quot;</code> and <code>r&quot;&quot;&quot;...&quot;&quot;&quot;</code> are now tagged as <code>regexp</code> instead of <code>string</code>: 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-14" type="checkbox" checked=true">
+<label for="unique-id-14" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs">r <span class="hljs-keyword">=</span> <span class="hljs-regexp">r&quot;single line regex&quot;</span>
+r <span class="hljs-keyword">=</span> <span class="hljs-regexp">r&quot;&quot;&quot;
+multiline
+regex
+&quot;&quot;&quot;</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">r = <span class="hljs-string">r&quot;single line regex&quot;</span>
+r = <span class="hljs-string">r&quot;&quot;&quot;
+multiline
+regex
+&quot;&quot;&quot;</span></code></pre>
+</div>
+</div>
+</p>
+<p>Multiline <code>Cmd</code> literals <code> &#96;&#96;&#96; ... &#96;&#96;&#96; </code> are detected as a single block instead of three separate literals &#40;no visual effect, but appreciate the fix&#33;&#41;: 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-15" type="checkbox" checked=true">
+<label for="unique-id-15" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs">cmd <span class="hljs-keyword">=</span> <span class="hljs-string">```
+julia --startup-file=no
+      -e &#x27;println(&quot;hello, world&quot;)&#x27;
+```</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">cmd = <span class="hljs-string">``</span><span class="hljs-string">`
+julia --startup-file=no
+      -e &#x27;println(&quot;hello, world&quot;)&#x27;
+`</span><span class="hljs-string">``</span></code></pre>
+</div>
+</div>
+</p>
+<p>Symbols are tagged as <code>symbol</code> &#40;this one was tricky since the same pattern is also used for literal ranges&#41;: 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-16" type="checkbox" checked=true">
+<label for="unique-id-16" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs">x <span class="hljs-keyword">=</span> <span class="hljs-symbol">:symbol</span>
+x <span class="hljs-keyword">=</span> <span class="hljs-built_in">f</span>(<span class="hljs-symbol">:symbol</span>)
+x <span class="hljs-keyword">=</span> <span class="hljs-number">1</span><span class="hljs-built_in">:</span>notsymbol
+x <span class="hljs-keyword">=</span> x<span class="hljs-built_in">:</span>notsymbol
+x <span class="hljs-keyword">=</span> x<span class="hljs-built_in">:</span><span class="hljs-built_in">notsymbol</span>(y)
+
+<span class="hljs-comment"># :( technically valid Julia, but never seen such strange things</span>
+x <span class="hljs-keyword">=</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-symbol">:symbol</span>
+x <span class="hljs-keyword">=</span> <span class="hljs-type">Z{T}</span> <span class="hljs-symbol">:symbol</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">x = :symbol
+x = f(:symbol)
+x = <span class="hljs-number">1</span>:notsymbol
+x = x:notsymbol
+x = x:notsymbol(y)
+
+<span class="hljs-comment"># :( technically valid Julia, but never seen such strange things</span>
+x = <span class="hljs-string">&quot;hello&quot;</span> :symbol
+x = Z{T} :symbol</code></pre>
+</div>
+</div>
+</p>
+<p>Some literal characters that were not recognized as such are now tagged as <code>string</code>: 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-17" type="checkbox" checked=true">
+<label for="unique-id-17" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs">x <span class="hljs-keyword">=</span> <span class="hljs-string">&#x27;\r&#x27;</span>
+x <span class="hljs-keyword">=</span> <span class="hljs-string">&#x27;\n&#x27;</span>
+x <span class="hljs-keyword">=</span> <span class="hljs-string">&#x27;\$&#x27;</span>
+x <span class="hljs-keyword">=</span> <span class="hljs-string">&#x27;\\&#x27;</span>
+x <span class="hljs-keyword">=</span> <span class="hljs-string">&#x27;a&#x27;</span> <span class="hljs-comment"># reference</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">x = &#x27;\r&#x27;
+x = &#x27;\n&#x27;
+x = &#x27;\$&#x27;
+x = &#x27;\\&#x27;
+x = <span class="hljs-string">&#x27;a&#x27;</span> <span class="hljs-comment"># reference</span></code></pre>
+</div>
+</div>
+</p>
+<p><code>&#33;</code> is now allowed in variable names, and thus also recognized in the context of finding function definitions and function calls. In other contexts it is tagged as an operator: 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-18" type="checkbox" checked=true">
+<label for="unique-id-18" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs"><span class="hljs-title">f!</span>(<span class="hljs-params">x</span>) <span class="hljs-keyword">=</span> x
+<span class="hljs-built_in">f!</span>(x)</code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">f!(x) = x
+f!(x)</code></pre>
+</div>
+</div>
+</p>
+<p>When <code>&#33;</code> is used in other contexts, it is tagged as an operator &#40;<code>built_in</code>&#41;: 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-19" type="checkbox" checked=true">
+<label for="unique-id-19" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs"><span class="hljs-keyword">if</span> <span class="hljs-built_in">!</span>x
+    <span class="hljs-comment"># ...</span>
+<span class="hljs-keyword">end</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs"><span class="hljs-keyword">if</span> !x
+    <span class="hljs-comment"># ...</span>
+<span class="hljs-keyword">end</span></code></pre>
+</div>
+</div>
+</p>
+<p><code>?</code> and <code>:</code> are also tagged as operators &#40;<code>built_in</code>&#41;: 
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-20" type="checkbox" checked=true">
+<label for="unique-id-20" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs">x <span class="hljs-built_in">?</span> <span class="hljs-string">&quot;hello&quot;</span> <span class="hljs-built_in">:</span> <span class="hljs-string">&quot;world&quot;</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs">x ? <span class="hljs-string">&quot;hello&quot;</span> : <span class="hljs-string">&quot;world&quot;</span></code></pre>
+</div>
+</div>
+</p>
+<h3 id="repl_highlighting"><a href="#repl_highlighting">REPL highlighting</a></h3>
+<p>Highlight.js also support highlighting of Julia REPL code using <code>julia-repl</code> as the language tag. This language definition is very simple – it <a href="https://github.com/highlightjs/highlight.js/blob/21b146644e15ba2b101341da0d3e4dc61db53056/src/languages/julia-repl.js#L29-L38">literally</a> just detects the <code>julia&gt;</code> prompt, strips the proper amount of leading whitespace, and processes the result using the regular <code>julia</code> language implementation. This means that improved REPL highlighting is obtained &quot;for free&quot;:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">function </span><span class="hljs-title">sayhello</span>(<span class="hljs-params">who</span><span class="hljs-built_in">::</span><span class="hljs-type">S</span>) <span class="hljs-keyword">where</span> <span class="hljs-type">S</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">AbstractString</span>
+           <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;hello, &quot;</span>, who)
+       <span class="hljs-keyword">end</span>
+</span>sayhello (generic function with 1 method)
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-built_in">sayhello</span>(<span class="hljs-string">&quot;world&quot;</span>)
+</span>hello, world</code></pre>
+<h2 id="concluding_remarks"><a href="#concluding_remarks">Concluding remarks</a></h2>
+<p>In this post I have presented some changes to the julia language syntax highlighter in the highlight.js library. In my opinion they are all strict improvements, and my plan is to submit as much as possible to the upstream project. In the meantime you can either use this file: <a href="/assets/julia.highlight.js"><code>julia.highlight.js</code></a>, which contain the <code>julia</code> and <code>julia-repl</code> languages, or build from source using <a href="https://github.com/fredrikekre/highlight.js/tree/fe/julia-unleashed">this branch</a> on my fork if you need compile with more languages included.</p>
+<p>Lets rewind and look at the example from the beginning of the post once again. While it doesn&#39;t exercise all of the changes, I hope you agree with me that the new markup is an improvement&#33;</p>
+
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-21" type="checkbox" checked=true">
+<label for="unique-id-21" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs"><span class="hljs-keyword">function </span><span class="hljs-title">main</span>(<span class="hljs-params">who</span><span class="hljs-built_in">::</span><span class="hljs-type">Union{String,Nothing}</span> <span class="hljs-keyword">=</span> <span class="hljs-literal">nothing</span>)
+    <span class="hljs-keyword">if</span> who <span class="hljs-built_in">===</span> <span class="hljs-literal">nothing</span>
+        who <span class="hljs-keyword">=</span> <span class="hljs-string">&quot;world&quot;</span>
+    <span class="hljs-keyword">end</span>
+    <span class="hljs-built_in">print</span>(<span class="hljs-literal">stdout</span>, <span class="hljs-string">&quot;hello, <span class="hljs-subst">$(who)</span>!\n&quot;</span>)
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">nothing</span>
+<span class="hljs-keyword">end</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs"><span class="hljs-keyword">function</span> main(who::<span class="hljs-built_in">Union</span>{<span class="hljs-built_in">String</span>,Nothing} = <span class="hljs-literal">nothing</span>)
+    <span class="hljs-keyword">if</span> who === <span class="hljs-literal">nothing</span>
+        who = <span class="hljs-string">&quot;world&quot;</span>
+    <span class="hljs-keyword">end</span>
+    print(stdout, <span class="hljs-string">&quot;hello, <span class="hljs-subst">$(who)</span>!\n&quot;</span>)
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">nothing</span>
+<span class="hljs-keyword">end</span></code></pre>
+</div>
+</div>
+
+<p>Finally, to get a feeling of how the new syntax highlighter perform and behave in &quot;real life&quot;, let&#39;s look at some Julia package code. To this end I copied verbatim the entire implementation of the <a href="https://github.com/giordano/StarWarsArrays.jl">StarWarsArrays.jl</a> package, written by <a href="https://github.com/giordano">Mosè Giordano</a>. I believe it exercise almost all of the major changes that I made:</p>
+
+<div class="toggle-code-wrap" style="position:relative">
+<input id="unique-id-22" type="checkbox" checked=true">
+<label for="unique-id-22" class="switch">
+  <span class="slider round"></span>
+</label>
+<div class="toggle-code-new">
+<pre><code class="julia hljs"><span class="hljs-comment"># Copyright (c) 2019 Mosè Giordano</span>
+<span class="hljs-comment"># MIT License (https://github.com/giordano/StarWarsArrays.jl/blob/master/LICENSE.md)</span>
+
+<span class="hljs-keyword">module</span> StarWarsArrays
+
+<span class="hljs-keyword">export</span> StarWarsArray, OriginalOrder, MacheteOrder
+
+<span class="hljs-comment"># Orders</span>
+<span class="hljs-keyword">abstract type</span> <span class="hljs-class">StarWarsOrder</span> <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-class">OriginalOrder</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">StarWarsOrder</span> <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-class">MacheteOrder</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">StarWarsOrder</span> <span class="hljs-keyword">end</span>
+
+<span class="hljs-comment"># Exception</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-class">StarWarsError</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">Exception</span>
+    i<span class="hljs-built_in">::</span><span class="hljs-type">Any</span>
+    order<span class="hljs-built_in">::</span><span class="hljs-type">Any</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">function </span>Base<span class="hljs-built_in">.</span><span class="hljs-title">showerror</span>(<span class="hljs-params">io</span><span class="hljs-built_in">::</span><span class="hljs-type">IO</span>, <span class="hljs-params">err</span><span class="hljs-built_in">::</span><span class="hljs-type">StarWarsError</span>)
+    <span class="hljs-built_in">print</span>(io, <span class="hljs-string">&quot;StarWarsError: there is no episode <span class="hljs-subst">$(err<span class="hljs-built_in">.</span>i)</span>&quot;</span> <span class="hljs-built_in">*</span> <span class="hljs-string">&quot;in <span class="hljs-subst">$(err<span class="hljs-built_in">.</span>order)</span>&quot;</span>)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-comment"># The main struct</span>
+<span class="hljs-keyword">struct</span> <span class="hljs-class">StarWarsArray{T,N,P&lt;:AbstractArray,O&lt;:StarWarsOrder}</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">AbstractArray{T,N}</span>
+    parent<span class="hljs-built_in">::</span><span class="hljs-type">P</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">function </span><span class="hljs-title">StarWarsArray</span>(<span class="hljs-params">p</span><span class="hljs-built_in">::</span><span class="hljs-type">P</span>, <span class="hljs-params">order</span><span class="hljs-built_in">::</span><span class="hljs-type">Type{<span class="hljs-built_in">&lt;:</span>StarWarsOrder}</span><span class="hljs-keyword">=</span>OriginalOrder) <span class="hljs-keyword">where</span> {<span class="hljs-type">T</span>,<span class="hljs-type">N</span>,<span class="hljs-type">P<span class="hljs-built_in">&lt;:</span></span><span class="hljs-type">AbstractArray{T,N}</span>}
+    <span class="hljs-built_in">StarWarsArray{T,N,P,order}</span>(p)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-title">machete_view_index</span>(<span class="hljs-params">i</span>) <span class="hljs-keyword">=</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, stop<span class="hljs-keyword">=</span>i)
+<span class="hljs-keyword">function </span><span class="hljs-title">StarWarsArray</span>(<span class="hljs-params">p</span><span class="hljs-built_in">::</span><span class="hljs-type">P</span>, <span class="hljs-params">order</span><span class="hljs-built_in">::</span><span class="hljs-type">Type{MacheteOrder}</span>) <span class="hljs-keyword">where</span> {<span class="hljs-type">T</span>,<span class="hljs-type">N</span>,<span class="hljs-type">P<span class="hljs-built_in">&lt;:</span></span><span class="hljs-type">AbstractArray{T,N}</span>}
+    <span class="hljs-built_in">StarWarsArray{T,N,P,order}</span>(<span class="hljs-built_in">view</span>(p, <span class="hljs-built_in">machete_view_index</span><span class="hljs-built_in">.</span>(<span class="hljs-built_in">size</span>(p) <span class="hljs-built_in">.</span><span class="hljs-built_in">-</span> <span class="hljs-number">1</span>)<span class="hljs-built_in">.</span><span class="hljs-built_in">.</span><span class="hljs-built_in">.</span>))
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-title">order</span>(<span class="hljs-built_in">::</span><span class="hljs-type">StarWarsArray{T,N,P,O}</span>) <span class="hljs-keyword">where</span> {<span class="hljs-type">T</span>,<span class="hljs-type">N</span>,<span class="hljs-type">P</span>,<span class="hljs-type">O</span>} <span class="hljs-keyword">=</span> O
+
+<span class="hljs-comment"># Indexing</span>
+<span class="hljs-keyword">function </span><span class="hljs-title">index</span>(<span class="hljs-params">i</span><span class="hljs-built_in">::</span><span class="hljs-type">Int</span>, <span class="hljs-built_in">::</span><span class="hljs-type">Int</span>, <span class="hljs-built_in">::</span><span class="hljs-type">Type{OriginalOrder}</span>)
+    <span class="hljs-keyword">if</span> <span class="hljs-number">4</span> <span class="hljs-built_in">&lt;=</span> i <span class="hljs-built_in">&lt;=</span> <span class="hljs-number">6</span>
+        <span class="hljs-keyword">return</span> i <span class="hljs-built_in">-</span> <span class="hljs-number">3</span>
+    <span class="hljs-keyword">elseif</span> <span class="hljs-number">1</span> <span class="hljs-built_in">&lt;=</span> i <span class="hljs-built_in">&lt;=</span> <span class="hljs-number">3</span>
+        <span class="hljs-keyword">return</span> i <span class="hljs-built_in">+</span> <span class="hljs-number">3</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> i
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">function </span><span class="hljs-title">index</span>(<span class="hljs-params">i</span><span class="hljs-built_in">::</span><span class="hljs-type">Int</span>, <span class="hljs-params">size</span><span class="hljs-built_in">::</span><span class="hljs-type">Int</span>, <span class="hljs-params">order</span><span class="hljs-built_in">::</span><span class="hljs-type">Type{MacheteOrder}</span>)
+    <span class="hljs-keyword">if</span> <span class="hljs-number">4</span> <span class="hljs-built_in">&lt;=</span> i <span class="hljs-built_in">&lt;=</span> <span class="hljs-number">5</span>
+        <span class="hljs-keyword">return</span> i <span class="hljs-built_in">-</span> <span class="hljs-number">3</span>
+    <span class="hljs-keyword">elseif</span> <span class="hljs-number">2</span> <span class="hljs-built_in">&lt;=</span> i <span class="hljs-built_in">&lt;=</span> <span class="hljs-number">3</span>
+        <span class="hljs-keyword">return</span> i <span class="hljs-built_in">+</span> <span class="hljs-number">1</span>
+    <span class="hljs-keyword">elseif</span>  <span class="hljs-number">6</span> <span class="hljs-built_in">&lt;=</span> i <span class="hljs-built_in">&lt;=</span> size <span class="hljs-built_in">+</span> <span class="hljs-number">1</span>
+        <span class="hljs-keyword">return</span> i <span class="hljs-built_in">-</span> <span class="hljs-number">1</span>
+    <span class="hljs-keyword">elseif</span> i <span class="hljs-built_in">==</span> <span class="hljs-number">1</span>
+        <span class="hljs-built_in">throw</span>(<span class="hljs-built_in">StarWarsError</span>(i,order))
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> i
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-comment"># Get the parent</span>
+Base<span class="hljs-built_in">.</span><span class="hljs-title">parent</span>(<span class="hljs-params">A</span><span class="hljs-built_in">::</span><span class="hljs-type">StarWarsArray</span>) <span class="hljs-keyword">=</span> A<span class="hljs-built_in">.</span>parent
+
+<span class="hljs-comment"># Get the size</span>
+Base<span class="hljs-built_in">.</span><span class="hljs-title">size</span>(<span class="hljs-params">A</span><span class="hljs-built_in">::</span><span class="hljs-type">StarWarsArray{T,N,P,O}</span>) <span class="hljs-keyword">where</span> {<span class="hljs-type">T</span>,<span class="hljs-type">N</span>,<span class="hljs-type">P</span>,<span class="hljs-type">O</span>} <span class="hljs-keyword">=</span> <span class="hljs-built_in">size</span>(<span class="hljs-built_in">parent</span>(A))
+
+<span class="hljs-comment"># Get the elements</span>
+Base<span class="hljs-built_in">.</span><span class="hljs-title">getindex</span>(<span class="hljs-params">A</span><span class="hljs-built_in">::</span><span class="hljs-type">StarWarsArray</span>, <span class="hljs-params">i</span><span class="hljs-built_in">::</span><span class="hljs-type">Int</span>) <span class="hljs-keyword">=</span>
+    <span class="hljs-built_in">getindex</span>(<span class="hljs-built_in">parent</span>(A), <span class="hljs-built_in">index</span>(i, <span class="hljs-built_in">length</span>(<span class="hljs-built_in">parent</span>(A)), <span class="hljs-built_in">order</span>(A)))
+Base<span class="hljs-built_in">.</span><span class="hljs-title">getindex</span>(<span class="hljs-params">A</span><span class="hljs-built_in">::</span><span class="hljs-type">StarWarsArray{T,N}</span>, <span class="hljs-params">i</span><span class="hljs-built_in">::</span><span class="hljs-type">Vararg{Int,N}</span>) <span class="hljs-keyword">where</span> {<span class="hljs-type">T</span>,<span class="hljs-type">N</span>} <span class="hljs-keyword">=</span>
+    <span class="hljs-built_in">getindex</span>(<span class="hljs-built_in">parent</span>(A), <span class="hljs-built_in">index</span><span class="hljs-built_in">.</span>(i, <span class="hljs-built_in">size</span>(<span class="hljs-built_in">parent</span>(A)), <span class="hljs-built_in">order</span>(A))<span class="hljs-built_in">.</span><span class="hljs-built_in">.</span><span class="hljs-built_in">.</span>)
+Base<span class="hljs-built_in">.</span><span class="hljs-title">setindex!</span>(<span class="hljs-params">A</span><span class="hljs-built_in">::</span><span class="hljs-type">StarWarsArray</span>, <span class="hljs-params">v</span>, <span class="hljs-params">i</span><span class="hljs-built_in">::</span><span class="hljs-type">Int</span>) <span class="hljs-keyword">=</span>
+    <span class="hljs-built_in">setindex!</span>(<span class="hljs-built_in">parent</span>(A), v, <span class="hljs-built_in">index</span>(i, <span class="hljs-built_in">length</span>(<span class="hljs-built_in">parent</span>(A)), <span class="hljs-built_in">order</span>(A)))
+Base<span class="hljs-built_in">.</span><span class="hljs-title">setindex!</span>(<span class="hljs-params">A</span><span class="hljs-built_in">::</span><span class="hljs-type">StarWarsArray{T,N}</span>, <span class="hljs-params">v</span>, <span class="hljs-params">i</span><span class="hljs-built_in">::</span><span class="hljs-type">Vararg{Int,N}</span>) <span class="hljs-keyword">where</span> {<span class="hljs-type">T</span>,<span class="hljs-type">N</span>} <span class="hljs-keyword">=</span>
+    <span class="hljs-built_in">setindex!</span>(<span class="hljs-built_in">parent</span>(A), v, <span class="hljs-built_in">index</span><span class="hljs-built_in">.</span>(i, <span class="hljs-built_in">size</span>(<span class="hljs-built_in">parent</span>(A)), <span class="hljs-built_in">order</span>(A))<span class="hljs-built_in">.</span><span class="hljs-built_in">.</span><span class="hljs-built_in">.</span>)
+
+<span class="hljs-comment"># Showing.  Note: this is awful, but it does what I want</span>
+Base<span class="hljs-built_in">.</span><span class="hljs-title">show</span>(<span class="hljs-params">io</span><span class="hljs-built_in">::</span><span class="hljs-type">IO</span>, <span class="hljs-params">m</span><span class="hljs-built_in">::</span><span class="hljs-string">MIME&quot;text/plain&quot;</span>, <span class="hljs-params">A</span><span class="hljs-built_in">::</span><span class="hljs-type">StarWarsArray{T,N,P,MacheteOrder}</span>) <span class="hljs-keyword">where</span> {<span class="hljs-type">T</span>,<span class="hljs-type">N</span>,<span class="hljs-type">P</span>} <span class="hljs-keyword">=</span>
+    <span class="hljs-built_in">show</span>(io, m,
+         <span class="hljs-built_in">view</span>(<span class="hljs-built_in">parent</span>(A),
+              <span class="hljs-built_in">map</span>(i<span class="hljs-built_in">-&gt;</span>StarWarsArrays<span class="hljs-built_in">.</span><span class="hljs-built_in">index</span><span class="hljs-built_in">.</span>(i <span class="hljs-built_in">.</span><span class="hljs-built_in">+</span> <span class="hljs-number">1</span>, <span class="hljs-built_in">length</span>(A), MacheteOrder),
+                  StarWarsArrays<span class="hljs-built_in">.</span><span class="hljs-built_in">machete_view_index</span><span class="hljs-built_in">.</span>(<span class="hljs-built_in">size</span>(A)))<span class="hljs-built_in">.</span><span class="hljs-built_in">.</span><span class="hljs-built_in">.</span>))
+
+<span class="hljs-keyword">end</span> <span class="hljs-comment"># module</span></code></pre>
+
+</div>
+<div class="toggle-code-old">
+
+<pre><code class="julia-old hljs"><span class="hljs-comment"># Copyright (c) 2019 Mosè Giordano</span>
+<span class="hljs-comment"># MIT License (https://github.com/giordano/StarWarsArrays.jl/blob/master/LICENSE.md)</span>
+
+<span class="hljs-keyword">module</span> StarWarsArrays
+
+<span class="hljs-keyword">export</span> StarWarsArray, OriginalOrder, MacheteOrder
+
+<span class="hljs-comment"># Orders</span>
+<span class="hljs-keyword">abstract type</span> StarWarsOrder <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">struct</span> OriginalOrder &lt;: StarWarsOrder <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">struct</span> MacheteOrder &lt;: StarWarsOrder <span class="hljs-keyword">end</span>
+
+<span class="hljs-comment"># Exception</span>
+<span class="hljs-keyword">struct</span> StarWarsError &lt;: <span class="hljs-built_in">Exception</span>
+    i::<span class="hljs-built_in">Any</span>
+    order::<span class="hljs-built_in">Any</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-keyword">function</span> Base.showerror(io::<span class="hljs-built_in">IO</span>, err::StarWarsError)
+    print(io, <span class="hljs-string">&quot;StarWarsError: there is no episode <span class="hljs-subst">$(err.i)</span>&quot;</span> * <span class="hljs-string">&quot;in <span class="hljs-subst">$(err.order)</span>&quot;</span>)
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-comment"># The main struct</span>
+<span class="hljs-keyword">struct</span> StarWarsArray{T,N,P&lt;:<span class="hljs-built_in">AbstractArray</span>,O&lt;:StarWarsOrder} &lt;: <span class="hljs-built_in">AbstractArray</span>{T,N}
+    parent::P
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">function</span> StarWarsArray(p::P, order::<span class="hljs-built_in">Type</span>{&lt;:StarWarsOrder}=OriginalOrder) <span class="hljs-keyword">where</span> {T,N,P&lt;:<span class="hljs-built_in">AbstractArray</span>{T,N}}
+    StarWarsArray{T,N,P,order}(p)
+<span class="hljs-keyword">end</span>
+
+machete_view_index(i) = range(<span class="hljs-number">1</span>, stop=i)
+<span class="hljs-keyword">function</span> StarWarsArray(p::P, order::<span class="hljs-built_in">Type</span>{MacheteOrder}) <span class="hljs-keyword">where</span> {T,N,P&lt;:<span class="hljs-built_in">AbstractArray</span>{T,N}}
+    StarWarsArray{T,N,P,order}(view(p, machete_view_index.(size(p) .- <span class="hljs-number">1</span>)...))
+<span class="hljs-keyword">end</span>
+
+order(::StarWarsArray{T,N,P,O}) <span class="hljs-keyword">where</span> {T,N,P,O} = O
+
+<span class="hljs-comment"># Indexing</span>
+<span class="hljs-keyword">function</span> index(i::<span class="hljs-built_in">Int</span>, ::<span class="hljs-built_in">Int</span>, ::<span class="hljs-built_in">Type</span>{OriginalOrder})
+    <span class="hljs-keyword">if</span> <span class="hljs-number">4</span> &lt;= i &lt;= <span class="hljs-number">6</span>
+        <span class="hljs-keyword">return</span> i - <span class="hljs-number">3</span>
+    <span class="hljs-keyword">elseif</span> <span class="hljs-number">1</span> &lt;= i &lt;= <span class="hljs-number">3</span>
+        <span class="hljs-keyword">return</span> i + <span class="hljs-number">3</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> i
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+<span class="hljs-keyword">function</span> index(i::<span class="hljs-built_in">Int</span>, size::<span class="hljs-built_in">Int</span>, order::<span class="hljs-built_in">Type</span>{MacheteOrder})
+    <span class="hljs-keyword">if</span> <span class="hljs-number">4</span> &lt;= i &lt;= <span class="hljs-number">5</span>
+        <span class="hljs-keyword">return</span> i - <span class="hljs-number">3</span>
+    <span class="hljs-keyword">elseif</span> <span class="hljs-number">2</span> &lt;= i &lt;= <span class="hljs-number">3</span>
+        <span class="hljs-keyword">return</span> i + <span class="hljs-number">1</span>
+    <span class="hljs-keyword">elseif</span>  <span class="hljs-number">6</span> &lt;= i &lt;= size + <span class="hljs-number">1</span>
+        <span class="hljs-keyword">return</span> i - <span class="hljs-number">1</span>
+    <span class="hljs-keyword">elseif</span> i == <span class="hljs-number">1</span>
+        throw(StarWarsError(i,order))
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">return</span> i
+    <span class="hljs-keyword">end</span>
+<span class="hljs-keyword">end</span>
+
+<span class="hljs-comment"># Get the parent</span>
+Base.parent(A::StarWarsArray) = A.parent
+
+<span class="hljs-comment"># Get the size</span>
+Base.size(A::StarWarsArray{T,N,P,O}) <span class="hljs-keyword">where</span> {T,N,P,O} = size(parent(A))
+
+<span class="hljs-comment"># Get the elements</span>
+Base.getindex(A::StarWarsArray, i::<span class="hljs-built_in">Int</span>) =
+    getindex(parent(A), index(i, length(parent(A)), order(A)))
+Base.getindex(A::StarWarsArray{T,N}, i::<span class="hljs-built_in">Vararg</span>{<span class="hljs-built_in">Int</span>,N}) <span class="hljs-keyword">where</span> {T,N} =
+    getindex(parent(A), index.(i, size(parent(A)), order(A))...)
+Base.setindex!(A::StarWarsArray, v, i::<span class="hljs-built_in">Int</span>) =
+    setindex!(parent(A), v, index(i, length(parent(A)), order(A)))
+Base.setindex!(A::StarWarsArray{T,N}, v, i::<span class="hljs-built_in">Vararg</span>{<span class="hljs-built_in">Int</span>,N}) <span class="hljs-keyword">where</span> {T,N} =
+    setindex!(parent(A), v, index.(i, size(parent(A)), order(A))...)
+
+<span class="hljs-comment"># Showing.  Note: this is awful, but it does what I want</span>
+Base.show(io::<span class="hljs-built_in">IO</span>, m::<span class="hljs-string">MIME&quot;text/plain&quot;</span>, A::StarWarsArray{T,N,P,MacheteOrder}) <span class="hljs-keyword">where</span> {T,N,P} =
+    show(io, m,
+         view(parent(A),
+              map(i-&gt;StarWarsArrays.index.(i .+ <span class="hljs-number">1</span>, length(A), MacheteOrder),
+                  StarWarsArrays.machete_view_index.(size(A)))...))
+
+<span class="hljs-keyword">end</span> <span class="hljs-comment"># module</span></code></pre>
+</div>
+</div>
+
+
+<style>
+.toggle-code-wrap input ~ .toggle-code-new {
+     display: none;
+}
+.toggle-code-wrap input:checked ~ .toggle-code-new {
+    display: block;
+}
+.toggle-code-wrap input ~ .toggle-code-old {
+     display: block;
+}
+.toggle-code-wrap input:checked ~ .toggle-code-old {
+    display: none;
+}
+
+.toggle-code-wrap input, .toggle-code-wrap label {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: inline-block;
+  width: 30px;
+  height: 17px;
+}
+.toggle-code-wrap input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-code-wrap .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+.toggle-code-wrap .slider:before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+.toggle-code-wrap input:checked ~ label.switch .slider {
+  background-color: #2196F3;
+  background-color: #458;
+}
+
+.toggle-code-wrap input:checked ~ label.switch .slider:before {
+  -webkit-transform: translateX(13px);
+  -ms-transform: translateX(13px);
+  transform: translateX(13px);
+}
+
+/* Rounded sliders */
+.toggle-code-wrap .slider.round {
+  border-radius: 8px;
+}
+.toggle-code-wrap .slider.round:before {
+  border-radius: 50%;
+}
+</style>
+
+
+</div><!-- CONTENT ENDS HERE -->
+
+    </div>
+    </article>
+    <hr>
+
+<!--
+    <div class="post-info">
+    <p>
+    {{ svg tag }} {{ jlinsert pagetags }}
+    </p>
+
+
+    </div>
+-->
+    </main>
+
+
+
+    </div> <!-- <div class="content"> -->
+
+    <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy 2020 <a rel="author" href="/">Fredrik Ekre</a></span>
+            <span><a rel="license" href="/about/#license">License</a></span>
+            <span><a href="/about/#privacy_policy">Privacy Policy</a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Website built with <a href="https://franklinjl.org/">Franklin.jl</a></span>
+        </div>
+    </div>
+</footer>
+
+
+    
+    
+        <!--  -->
+<!-- <script src="/libs/highlight/highlight.js"></script> -->
+<script src="/libs/highlight/highlight.js"></script>
+
+
+    
+
+    <script src="/libs/hello-hermit.js"></script>
+
+    </div> <!-- container -->
+  </body>
+</html>

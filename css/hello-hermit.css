@@ -29,7 +29,7 @@ hr {
  overflow:visible
 }
 pre {
- font-family:monospace,monospace;
+ font-family:JuliaMono,monospace,monospace;
  font-display:auto;
  font-size:1em
 }
@@ -162,7 +162,7 @@ code[class*=language-],
 pre[class*=language-] {
  color:#ccc;
  background:0 0;
- font-family:Consolas,Monaco,andale mono,ubuntu mono,monospace;
+ font-family:JuliaMono,Consolas,Monaco,andale mono,ubuntu mono,monospace;
  font-display:auto;
  text-align:left;
  white-space:pre;
@@ -306,6 +306,37 @@ pre[class*=language-] {
  src:url(../assets/fonts/Inter-UI-BoldItalic.woff2) format("woff2"),
  url(../assets/fonts/Inter-UI-BoldItalic.woff) format("woff")
 }
+
+@font-face {
+    font-family: JuliaMono;
+    src: url("../assets/fonts/JuliaMono-RegularLatin.woff2") format("woff2");
+    font-display: auto;
+    font-weight: 400;
+    unicode-range: U+00-7F; /* Basic Latin characters */
+}
+
+@font-face {
+    font-family: JuliaMono;
+    src: url("../assets/fonts/JuliaMono-BoldLatin.woff2") format("woff2");
+    font-display: auto;
+    font-weight: 700;
+    unicode-range: U+00-7F; /* Basic Latin characters */
+}
+
+@font-face {
+    font-family: JuliaMono;
+    src: url("../assets/fonts/JuliaMono-Regular.woff2") format("woff2");
+    font-display: auto;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: JuliaMono;
+    src: url("../assets/fonts/JuliaMono-Bold.woff2") format("woff2");
+    font-display: auto;
+    font-weight: 700;
+}
+
 .button-container {
  display:table;
  margin-left:auto;
@@ -459,7 +490,7 @@ a.button.wide {
  text-decoration:none;
  font-weight:700;
  font-display:auto;
- font-family:monospace,monospace
+ font-family:JuliaMono,monospace,monospace
 }
 .logo img {
  height:44px
@@ -578,7 +609,7 @@ body {
  color:#222;
  text-rendering:optimizeLegibility;
  -webkit-font-smoothing:antialiased;
- font-feature-settings:"liga","tnum","case","calt","zero","ss01","locl";
+ /*font-feature-settings:"liga","tnum","case","calt","zero","ss01","locl";*/
  -webkit-overflow-scrolling:touch;
  -webkit-text-size-adjust:100%;
  display:flex;
@@ -591,8 +622,12 @@ body {
  }
 }
 body.dark-theme {
+ /* Original theme colors */
  background-color:#292a2d;
- color:#a9a9b3;
+ /* color:#a9a9b3; */
+ /* Adopted colors from Firefox reader view */
+ /* background-color:#333; */
+ color:#eee;
 }
 h2,
 h3,
@@ -677,14 +712,16 @@ figure figcaption.right {
  text-align:right
 }
 code {
- font-family:Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;
+ font-family:JuliaMono,Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;
  font-display:auto;
  font-feature-settings:normal;
  background:#eaeaea;
- padding:1px 6px;
+ /*padding:1px 6px;*/
+ padding:1px 3px;
  margin:0 2px;
  border-radius:5px;
  /*font-size:.95rem*/
+ font-size:.95em
 }
 .dark-theme code {
  background:#3b3d42
@@ -693,12 +730,13 @@ pre {
  background:#212020;
  padding:20px;
  border-radius:8px;
- font-size:.95rem;
+ /*font-size:.95rem;*/
+ font-size:.95em;
  overflow:auto
 }
 @media(max-width:684px) {
  pre {
-  white-space:pre-wrap;
+  /*white-space:pre-wrap;*/
   word-wrap:break-word
  }
 }
@@ -709,9 +747,9 @@ pre code {
  padding:0;
  font-size:inherit
 }
-.dark-theme pre code {
+/*.dark-theme pre code {
  color:inherit
-}
+}*/
 blockquote {
  border-left:2px solid;
  margin:40px;
@@ -1204,6 +1242,7 @@ p.img-404 svg {
 }
 h1 code {
   background: inherit;
+  font-size: 0.95em;
 }
 .dark-theme h1 code {
   background: inherit;
@@ -1215,4 +1254,7 @@ h1 code {
 }
 .posts .post-item a .post-title:hover {
   text-decoration: underline;
+}
+* {
+  font-variant-ligatures: none;
 }
