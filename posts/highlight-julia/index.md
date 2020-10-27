@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 
 Overall the Julia output is quite good for this example: keywords such as `function`, `if`, `return` and `end` are tagged as keywords; strings are recognized as `string`s; `nothing` is tagged as `literal`; and string interpolation is tagged as `subst`. However, when looking into the details, and in particular when comparing to the C example, it is evident that the syntax highlighter for Julia is not as sophisticated as the one for C. In particular, the C highlighter recognized `int main(int argc, char *argv[])` as a function definition (tagged as `function`) with `main` tagged as `title` and `argc`, `*argv[]` tagged as `params` -- surely the same can be achieved for Julia too!
 
-You might also note that `Nothing` was not recognized in the Julia example. This turned out to be because the internal lists of keyword and constants had not been updated in some time. Updating these was purely a mechanical task and the patch is in fact already [merged upstream](https://github.com/highlightjs/highlight.js/pull/2781).
+You might also note that `Nothing` and `stdout` was not recognized in the Julia example. This turned out to be because the internal lists of keyword and constants had not been updated in some time. Updating these was purely a mechanical task and the patch is in fact already [merged upstream](https://github.com/highlightjs/highlight.js/pull/2781).
 
 ## Improvements to the Julia syntax highlighter
 
