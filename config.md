@@ -34,9 +34,9 @@ ignore = [setdiff([isfile(x) ? x : x * "/" for x in readdir()], _include); _excl
 
 <!-- Menu -->
 @def menu = [
-        (name = "Posts", url = "/posts/"),
-        #(name = "Research", url = "/research/"),
-        (name = "About", url = "/about/"),
+        (name = "posts", url = "/posts/"),
+        #(name = "research", url = "/research/"),
+        (name = "about", url = "/about/"),
     ]
 
 

@@ -504,9 +504,10 @@ a.button.wide {
 .logo__cursor {
  display:inline-block;
  width:10px;
- height:1rem;
+ /*height:1rem;*/
+ height:1.125rem;
  background:#39b54a;
- margin-left:5px;
+ /*margin-left:5px;*/
  border-radius:1px;
  animation:cursor 1.5s infinite;
 }
@@ -552,7 +553,10 @@ a.button.wide {
  max-width:100%;
  margin:0 auto;
  padding:0 15px;
- font-size:1rem;
+ /*font-size:1rem;*/
+ font-size:1.125rem;
+ font-family: JuliaMono, monospace, monospace;
+ font-weight: 700;
  list-style:none
 }
 .menu__inner li {
