@@ -87,12 +87,14 @@ Highlight.js has a predefined list of types associated with the `julia` language
 Here are some examples of such contexts. Note, in particular, that the user-defined type `UserType` is correctly tagged.
 
 Any word directly attached to `{...}`:
+
 \codetoggle{
 x = Vector{Int}
 x = UserType{Int}
 }
 
 Right hand side of `::`
+
 \codetoggle{
 x::Int
 x::UserType
@@ -102,6 +104,7 @@ x::AbstractArray{UserType{T}, 3}
 }
 
 Right and left hand side of `<:` and `>:`
+
 \codetoggle{
 Int <: String
 Int <: UserType
@@ -113,19 +116,23 @@ UserType >: String
 }
 
 After `where`:
+
 \codetoggle{
 Vector{Int} where Int
 Vector{UserType} where UserType
 }
 
 Fortunately the contexts above should cover the vast majority of cases -- while types sometimes show up in other contexts it is not very common. The list of built-ins keyword is still useful in other contexts, for example in
+
 \codetoggle{
 x = UserType
 x = UserType{T}
 x = Vector
 x = Vector{T}
 }
+
 it is difficult to tell if the lonely `UserType` is a type or a regular variable, but `Vector` is still tagged. However, using a pre-defined list is not always correct either, since Julia allows for things like this:
+
 \codetoggle{
 Vector = 123
 }
@@ -135,6 +142,7 @@ where `Vector` is wrongly tagged. Perhaps contextual highlighting has sufficient
 ### Type definitions
 
 Type names are tagged as `class`, here are some examples:
+
 \codetoggle{
 struct Struct
     x::Int
@@ -220,6 +228,7 @@ sayhi.(["world", "mom"])
 Here is a list of miscellaneous minor changes and bugfixes that I found while working on the rest.
 
 Literal regular expressions, `r"..."` and `r"""..."""` are now tagged as `regexp` instead of `string`:
+
 \codetoggle{
 r = r"single line regex"
 r = r"""
@@ -229,6 +238,7 @@ regex
 }
 
 Multiline `Cmd` literals `` ``` ... ``` `` are detected as a single block instead of three separate literals (no visual effect, but appreciate the fix!):
+
 \codetoggle{
 cmd = ```
 julia --startup-file=no
@@ -237,6 +247,7 @@ julia --startup-file=no
 }
 
 Symbols are tagged as `symbol` (this one was tricky since the same pattern is also used for literal ranges):
+
 \codetoggle{
 x = :symbol
 x = f(:symbol)
@@ -250,6 +261,7 @@ x = Z{T} :symbol
 }
 
 Some literal characters that were not recognized as such are now tagged as `string`:
+
 \codetoggle{
 x = '\r'
 x = '\n'
@@ -259,12 +271,14 @@ x = 'a' # reference
 }
 
 `!` is now allowed in variable names, and thus also recognized in the context of finding function definitions and function calls:
+
 \codetoggle{
 f!(x) = x
 f!(x)
 }
 
 When `!` is used in other contexts, it is tagged as an operator (`built_in`):
+
 \codetoggle{
 if !x
     # ...
@@ -272,6 +286,7 @@ end
 }
 
 `?` and `:` are also tagged as operators (`built_in`):
+
 \codetoggle{
 x ? "hello" : "world"
 }
