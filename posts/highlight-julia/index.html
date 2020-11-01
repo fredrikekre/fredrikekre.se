@@ -196,7 +196,8 @@ x &gt;&gt;&gt;= y  x &gt;&gt;= y   x &amp;= y    x ⊻= y</code></pre>
 <h3 id="contextual_highlighting_of_types"><a href="#contextual_highlighting_of_types">Contextual highlighting of types</a></h3>
 <p>Highlight.js has a predefined list of types associated with the <code>julia</code> language. This include, for example, <code>String</code>, <code>Int</code>, <code>Vector</code> and <code>Union</code>. When these words are encountered they are tagged with the <code>type</code> tag &#40;previously mislabeled with the <code>built_in</code> tag&#41;. In Julia, however, user-defined types are first class citizens, and usually there is no point in distinguishing them from the built-in types. Obviously the highlighter can not be taught to recognize all types out there, but in Julia there are certain context in which the content must be types. By teaching the highlighter about these contexts it is possible to unconditionally tag it with the <code>type</code> tag.</p>
 <p>Here are some examples of such contexts. Note, in particular, that the user-defined type <code>UserType</code> is correctly tagged.</p>
-<p>Any word directly attached to <code>&#123;...&#125;</code>: 
+<p>Any word directly attached to <code>&#123;...&#125;</code>:</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-4" type="checkbox" checked=true">
 <label for="unique-id-4" class="switch">
@@ -213,8 +214,9 @@ x <span class="hljs-keyword">=</span> <span class="hljs-type">UserType{Int}</spa
 x = UserType{<span class="hljs-built_in">Int</span>}</code></pre>
 </div>
 </div>
-</p>
-<p>Right hand side of <code>::</code> 
+
+<p>Right hand side of <code>::</code></p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-5" type="checkbox" checked=true">
 <label for="unique-id-5" class="switch">
@@ -237,8 +239,9 @@ x::<span class="hljs-built_in">AbstractArray</span>{UserType, <span class="hljs-
 x::<span class="hljs-built_in">AbstractArray</span>{UserType{T}, <span class="hljs-number">3</span>}</code></pre>
 </div>
 </div>
-</p>
-<p>Right and left hand side of <code>&lt;:</code> and <code>&gt;:</code> 
+
+<p>Right and left hand side of <code>&lt;:</code> and <code>&gt;:</code></p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-6" type="checkbox" checked=true">
 <label for="unique-id-6" class="switch">
@@ -265,8 +268,9 @@ UserType &lt;: <span class="hljs-built_in">String</span>
 UserType &gt;: <span class="hljs-built_in">String</span></code></pre>
 </div>
 </div>
-</p>
-<p>After <code>where</code>: 
+
+<p>After <code>where</code>:</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-7" type="checkbox" checked=true">
 <label for="unique-id-7" class="switch">
@@ -283,8 +287,9 @@ UserType &gt;: <span class="hljs-built_in">String</span></code></pre>
 <span class="hljs-built_in">Vector</span>{UserType} <span class="hljs-keyword">where</span> UserType</code></pre>
 </div>
 </div>
-</p>
-<p>Fortunately the contexts above should cover the vast majority of cases – while types sometimes show up in other contexts it is not very common. The list of built-ins keyword is still useful in other contexts, for example in 
+
+<p>Fortunately the contexts above should cover the vast majority of cases – while types sometimes show up in other contexts it is not very common. The list of built-ins keyword is still useful in other contexts, for example in</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-8" type="checkbox" checked=true">
 <label for="unique-id-8" class="switch">
@@ -305,7 +310,9 @@ x = <span class="hljs-built_in">Vector</span>
 x = <span class="hljs-built_in">Vector</span>{T}</code></pre>
 </div>
 </div>
- it is difficult to tell if the lonely <code>UserType</code> is a type or a regular variable, but <code>Vector</code> is still tagged. However, using a pre-defined list is not always correct either, since Julia allows for things like this: 
+
+<p>it is difficult to tell if the lonely <code>UserType</code> is a type or a regular variable, but <code>Vector</code> is still tagged. However, using a pre-defined list is not always correct either, since Julia allows for things like this:</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-9" type="checkbox" checked=true">
 <label for="unique-id-9" class="switch">
@@ -320,10 +327,11 @@ x = <span class="hljs-built_in">Vector</span>{T}</code></pre>
 <pre><code class="julia-old hljs"><span class="hljs-built_in">Vector</span> = <span class="hljs-number">123</span></code></pre>
 </div>
 </div>
-</p>
+
 <p>where <code>Vector</code> is wrongly tagged. Perhaps contextual highlighting has sufficiently good coverage that the pre-defined list should be ignored completely?</p>
 <h3 id="type_definitions"><a href="#type_definitions">Type definitions</a></h3>
-<p>Type names are tagged as <code>class</code>, here are some examples: 
+<p>Type names are tagged as <code>class</code>, here are some examples:</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-10" type="checkbox" checked=true">
 <label for="unique-id-10" class="switch">
@@ -394,7 +402,7 @@ x = <span class="hljs-built_in">Vector</span>{T}</code></pre>
 <span class="hljs-keyword">primitive type</span> PrimitiveType &lt;: <span class="hljs-built_in">Integer</span> <span class="hljs-number">8</span> <span class="hljs-keyword">end</span></code></pre>
 </div>
 </div>
-</p>
+
 <p>Note that the contextual highlighting of types does a great job here – it correctly found all the types&#33;</p>
 <h3 id="function_definitions"><a href="#function_definitions">Function definitions</a></h3>
 <p>Function names in function definitions are tagged as <code>title</code>, and the function parameters are tagged as <code>params</code>:</p>
@@ -497,7 +505,8 @@ sayhi.([<span class="hljs-string">&quot;world&quot;</span>, <span class="hljs-st
 
 <h3 id="miscellaneous"><a href="#miscellaneous">Miscellaneous</a></h3>
 <p>Here is a list of miscellaneous minor changes and bugfixes that I found while working on the rest.</p>
-<p>Literal regular expressions, <code>r&quot;...&quot;</code> and <code>r&quot;&quot;&quot;...&quot;&quot;&quot;</code> are now tagged as <code>regexp</code> instead of <code>string</code>: 
+<p>Literal regular expressions, <code>r&quot;...&quot;</code> and <code>r&quot;&quot;&quot;...&quot;&quot;&quot;</code> are now tagged as <code>regexp</code> instead of <code>string</code>:</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-14" type="checkbox" checked=true">
 <label for="unique-id-14" class="switch">
@@ -520,8 +529,9 @@ regex
 &quot;&quot;&quot;</span></code></pre>
 </div>
 </div>
-</p>
-<p>Multiline <code>Cmd</code> literals <code>&#96;&#96;&#96; ... &#96;&#96;&#96;</code> are detected as a single block instead of three separate literals &#40;no visual effect, but appreciate the fix&#33;&#41;:
+
+<p>Multiline <code>Cmd</code> literals <code>&#96;&#96;&#96; ... &#96;&#96;&#96;</code> are detected as a single block instead of three separate literals &#40;no visual effect, but appreciate the fix&#33;&#41;:</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-15" type="checkbox" checked=true">
 <label for="unique-id-15" class="switch">
@@ -542,8 +552,9 @@ julia --startup-file=no
 `</span><span class="hljs-string">``</span></code></pre>
 </div>
 </div>
-</p>
-<p>Symbols are tagged as <code>symbol</code> &#40;this one was tricky since the same pattern is also used for literal ranges&#41;: 
+
+<p>Symbols are tagged as <code>symbol</code> &#40;this one was tricky since the same pattern is also used for literal ranges&#41;:</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-16" type="checkbox" checked=true">
 <label for="unique-id-16" class="switch">
@@ -574,8 +585,9 @@ x = <span class="hljs-string">&quot;hello&quot;</span> :symbol
 x = Z{T} :symbol</code></pre>
 </div>
 </div>
-</p>
-<p>Some literal characters that were not recognized as such are now tagged as <code>string</code>: 
+
+<p>Some literal characters that were not recognized as such are now tagged as <code>string</code>:</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-17" type="checkbox" checked=true">
 <label for="unique-id-17" class="switch">
@@ -598,8 +610,9 @@ x = &#x27;\\&#x27;
 x = <span class="hljs-string">&#x27;a&#x27;</span> <span class="hljs-comment"># reference</span></code></pre>
 </div>
 </div>
-</p>
-<p><code>&#33;</code> is now allowed in variable names, and thus also recognized in the context of finding function definitions and function calls: 
+
+<p><code>&#33;</code> is now allowed in variable names, and thus also recognized in the context of finding function definitions and function calls:</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-18" type="checkbox" checked=true">
 <label for="unique-id-18" class="switch">
@@ -616,8 +629,9 @@ x = <span class="hljs-string">&#x27;a&#x27;</span> <span class="hljs-comment"># 
 f!(x)</code></pre>
 </div>
 </div>
-</p>
-<p>When <code>&#33;</code> is used in other contexts, it is tagged as an operator &#40;<code>built_in</code>&#41;: 
+
+<p>When <code>&#33;</code> is used in other contexts, it is tagged as an operator &#40;<code>built_in</code>&#41;:</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-19" type="checkbox" checked=true">
 <label for="unique-id-19" class="switch">
@@ -636,8 +650,9 @@ f!(x)</code></pre>
 <span class="hljs-keyword">end</span></code></pre>
 </div>
 </div>
-</p>
-<p><code>?</code> and <code>:</code> are also tagged as operators &#40;<code>built_in</code>&#41;: 
+
+<p><code>?</code> and <code>:</code> are also tagged as operators &#40;<code>built_in</code>&#41;:</p>
+
 <div class="toggle-code-wrap" style="position:relative">
 <input id="unique-id-20" type="checkbox" checked=true">
 <label for="unique-id-20" class="switch">
@@ -652,7 +667,7 @@ f!(x)</code></pre>
 <pre><code class="julia-old hljs">x ? <span class="hljs-string">&quot;hello&quot;</span> : <span class="hljs-string">&quot;world&quot;</span></code></pre>
 </div>
 </div>
-</p>
+
 <h3 id="repl_highlighting"><a href="#repl_highlighting">REPL highlighting</a></h3>
 <p>Highlight.js also support highlighting of Julia REPL code using <code>julia-repl</code> as the language tag. This language definition is very simple – it <a href="https://github.com/highlightjs/highlight.js/blob/21b146644e15ba2b101341da0d3e4dc61db53056/src/languages/julia-repl.js#L29-L38">literally</a> just detects the <code>julia&gt;</code> prompt, strips the proper amount of leading whitespace, and processes the result using the regular <code>julia</code> language implementation. This means that improved REPL highlighting is obtained &quot;for free&quot;:</p>
 <pre><code class="julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">function </span><span class="hljs-title">sayhello</span>(<span class="hljs-params">who</span><span class="hljs-built_in">::</span><span class="hljs-type">S</span>) <span class="hljs-keyword">where</span> <span class="hljs-type">S</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">AbstractString</span>
