@@ -3,7 +3,7 @@ date = "2020-10-27"
 title = "Improved syntax highlighting for Julia on the web"
 html_title = "Improved syntax highlighting for Julia on the web"
 var"layout-post" = nothing
-tags = ["highlight.js", "javascript", "julia", "open source"]
+tags = ["highlight.js", "javascript", "julia", "open-source"]
 hascode = true
 +++
 
