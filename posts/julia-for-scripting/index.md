@@ -3,12 +3,12 @@ date = "2020-07-29"
 title = "JuliaCon 2020: Julia for scripting"
 var"layout-post" = nothing
 tags = ["julia", "juliacon"]
-rss = "Abstract, slides and a recording from my JuliaCon 2020 presentation titled *Julia for scripting*"
+rss = "Abstract, slides and a recording from my JuliaCon 2020 presentation titled: *Julia for scripting*"
 +++
 
 +++
 # Dependent variables
-website_descr = locvar("rss")
+website_descr = replace(locvar("rss"), "*" => "")
 rss_pubdate = Date(locvar("date"))
 +++
 
