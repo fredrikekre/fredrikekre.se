@@ -1,4 +1,4 @@
-Sitemap: sitemap.xml
+Sitemap: https://fredrikekre.se/sitemap.xml
 
 User-agent: *
 Disallow:

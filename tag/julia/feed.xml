@@ -1,0 +1,49 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Fredrik Ekre</title>
+  <description><![CDATA[My personal website. I am a PhD student in computational mechanics and enjoy programming. Sometimes post about research, programming, and other topics.
+]]></description>
+  <link>https://fredrikekre.se/</link>
+  <atom:link href="https://fredrikekre.se/tag/julia/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Improved syntax highlighting for Julia on the web</title>
+    <link>https://fredrikekre.se/posts/highlight-julia/</link>
+    <description><![CDATA[A greatly improved syntax highlighter for the Julia programming language in highlight.js.
+<br><a href="https://fredrikekre.se/posts/highlight-julia/">Read more</a>]]></description>
+    <guid>https://fredrikekre.se/posts/highlight-julia/</guid>
+    <pubDate>Tue, 27 Oct 2020 00:00:00 UT</pubDate>
+  </item>
+  <item>
+    <title>JuliaCon 2020: display, show and print – how Julia's display system works</title>
+    <link>https://fredrikekre.se/posts/display-show-print/</link>
+    <description><![CDATA[Abstract, slides and a recording from my JuliaCon 2020 presentation titled <em>display, show and print – how Julia&#39;s display system works</em>
+<br><a href="https://fredrikekre.se/posts/display-show-print/">Read more</a>]]></description>
+    <guid>https://fredrikekre.se/posts/display-show-print/</guid>
+    <pubDate>Fri, 31 Jul 2020 00:00:00 UT</pubDate>
+  </item>
+  <item>
+    <title>JuliaCon 2020: Julia for scripting</title>
+    <link>https://fredrikekre.se/posts/julia-for-scripting/</link>
+    <description><![CDATA[Abstract, slides and a recording from my JuliaCon 2020 presentation titled <em>Julia for scripting</em>
+<br><a href="https://fredrikekre.se/posts/julia-for-scripting/">Read more</a>]]></description>
+    <guid>https://fredrikekre.se/posts/julia-for-scripting/</guid>
+    <pubDate>Wed, 29 Jul 2020 00:00:00 UT</pubDate>
+  </item>
+  <item>
+    <title>JuliaCon 2019: Literate programming with Literate.jl</title>
+    <link>https://fredrikekre.se/posts/literate-programming/</link>
+    <description><![CDATA[Abstract, slides and a recording from my JuliaCon 2019 presentation titled <em>Literate programming with Literate.jl</em>
+<br><a href="https://fredrikekre.se/posts/literate-programming/">Read more</a>]]></description>
+    <guid>https://fredrikekre.se/posts/literate-programming/</guid>
+    <pubDate>Tue, 23 Jul 2019 00:00:00 UT</pubDate>
+  </item>
+  <item>
+    <title>JuliaCon 2019: Pkg, Project.toml, Manifest.toml and Environments</title>
+    <link>https://fredrikekre.se/posts/pkg-project-manifest-environments/</link>
+    <description><![CDATA[Abstract, slides and a recording from my JuliaCon 2019 presentation titled <em>Pkg, Project.toml, Manifest.toml and Environments</em>
+<br><a href="https://fredrikekre.se/posts/pkg-project-manifest-environments/">Read more</a>]]></description>
+    <guid>https://fredrikekre.se/posts/pkg-project-manifest-environments/</guid>
+    <pubDate>Tue, 23 Jul 2019 00:00:00 UT</pubDate>
+  </item>
+</channel>
+</rss>

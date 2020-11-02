@@ -2,55 +2,55 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-    <loc>posts/display-show-print/index.html</loc>
-    <lastmod>2020-10-26</lastmod>
+    <loc>https://fredrikekre.se/posts/display-show-print/index.html</loc>
+    <lastmod>2020-11-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>404/index.html</loc>
+    <loc>https://fredrikekre.se/404/index.html</loc>
     <lastmod>2020-10-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>posts/highlight-julia/index.html</loc>
+    <loc>https://fredrikekre.se/posts/highlight-julia/index.html</loc>
+    <lastmod>2020-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://fredrikekre.se/posts/literate-programming/index.html</loc>
+    <lastmod>2020-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://fredrikekre.se/posts/julia-for-scripting/index.html</loc>
+    <lastmod>2020-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+</url>
+<url>
+    <loc>https://fredrikekre.se/about/index.html</loc>
     <lastmod>2020-11-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>posts/literate-programming/index.html</loc>
-    <lastmod>2020-10-26</lastmod>
+    <loc>https://fredrikekre.se/posts/pkg-project-manifest-environments/index.html</loc>
+    <lastmod>2020-11-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>posts/julia-for-scripting/index.html</loc>
-    <lastmod>2020-10-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>about/index.html</loc>
+    <loc>https://fredrikekre.se/posts/index.html</loc>
     <lastmod>2020-10-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
 </url>
 <url>
-    <loc>posts/pkg-project-manifest-environments/index.html</loc>
-    <lastmod>2020-10-26</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>posts/index.html</loc>
-    <lastmod>2020-10-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-<url>
-    <loc>index.html</loc>
+    <loc>https://fredrikekre.se/index.html</loc>
     <lastmod>2020-10-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
