@@ -23,6 +23,7 @@ function on_write(pg, vars; output_path)
         pg = replace(pg, r => s)
         l′′ = length(pg)
         @assert div(l - l′, 5) == div(l′ - l′′, 4)
+        @assert l - l′ > 0
         write(output_path, pg)
     end
     return nothing

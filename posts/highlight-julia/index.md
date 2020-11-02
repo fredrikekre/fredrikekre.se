@@ -1,14 +1,20 @@
 +++
 date = "2020-10-27"
 title = "Improved syntax highlighting for Julia on the web"
-html_title = "Improved syntax highlighting for Julia on the web"
 var"layout-post" = nothing
 tags = ["highlight.js", "javascript", "julia", "open-source"]
 hascode = true
+rss = "A greatly improved syntax highlighter for the Julia programming language in highlight.js."
++++
+
++++
+# Dependent variables
+website_descr = locvar("rss")
+rss_pubdate = Date(locvar("date"))
 +++
 
 ~~~
-<h1><a href="{{ get_url }}">{{ fill html_title }}</a></h1>
+<h1><a href="{{ get_url }}">{{ markdown2html title }}</a></h1>
 ~~~
 
 

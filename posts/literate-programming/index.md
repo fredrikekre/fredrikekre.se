@@ -1,13 +1,19 @@
 +++
 date = "2019-07-23"
 title = "JuliaCon 2019: Literate programming with Literate.jl"
-html_title = "JuliaCon 2019: Literate programming with <code>Literate.jl</code>"
 var"layout-post" = nothing
 tags = ["julia", "juliacon"]
+rss = "Abstract, slides and a recording from my JuliaCon 2019 presentation titled *Literate programming with Literate.jl*"
++++
+
++++
+# Dependent variables
+website_descr = locvar("rss")
+rss_pubdate = Date(locvar("date"))
 +++
 
 ~~~
-<h1><a href="{{ get_url }}">{{ fill html_title }}</a></h1>
+<h1><a href="{{ get_url }}">{{ markdown2html title }}</a></h1>
 ~~~
 
 This is one of my presentations from JuliaCon 2019. The slides are available [here](slides), and a recording of the talk is available [here](https://youtu.be/Tfp1WEdYfqk).

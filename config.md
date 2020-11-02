@@ -1,9 +1,9 @@
 <!-- RSS settings -->
-<!--
+
 @def website_title = "Fredrik Ekre"
-@def website_descr = "Example website using Franklin"
-@def website_url   = "http://localhost:8000/"
--->
+@def website_descr = "My personal website. I am a PhD student in computational mechanics and enjoy programming. Sometimes post about research, programming, and other topics."
+@def website_url = "https://fredrikekre.se"
+
 +++
 # Exclude everything that is not explicitly in include
 _include = ["_assets/", "_css/", "_libs/", "_layout/", "index.html", "404.md", "posts/", "about/"]

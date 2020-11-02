@@ -3,10 +3,17 @@ date = "2020-07-29"
 title = "JuliaCon 2020: Julia for scripting"
 var"layout-post" = nothing
 tags = ["julia", "juliacon"]
+rss = "Abstract, slides and a recording from my JuliaCon 2020 presentation titled *Julia for scripting*"
++++
+
++++
+# Dependent variables
+website_descr = locvar("rss")
+rss_pubdate = Date(locvar("date"))
 +++
 
 ~~~
-<h1><a href="{{ get_url }}">{{ fill title }}</a></h1>
+<h1><a href="{{ get_url }}">{{ markdown2html title }}</a></h1>
 ~~~
 
 This is one of my presentations from JuliaCon 2020. The slides are available [here](slides), and a recording of the talk is available [here](https://youtu.be/IuwxE3m0_QQ).
