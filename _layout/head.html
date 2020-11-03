@@ -9,8 +9,8 @@
   <meta name="author" content="{{ fill author.name }}">
   <meta name="description" content="{{ markdown2html website_descr }}">
 
-  {{if hasmath}} {{insert head_katex.html }}     {{end}}
-  {{if hascode}} {{insert head_highlight.html }}   {{end}}
+  {{ if hasmath }} {{ insert head_katex.html }} {{ end }}
+  {{ if hascode }} {{ insert head_highlight.html }} {{ end }}
 
   <meta name="theme-color" content="#ffffff" />
   <link rel="stylesheet" href="/css/hello-hermit.css">

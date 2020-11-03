@@ -114,7 +114,7 @@ function list_pages_by_date(pages)
         date = Date(date)
         title = something(pagevar(page, "markdown_title"), pagevar(page, "title"))
         title === nothing && error("no title found on page $page")
-        title = fd2html(title; nop=true, internal=true)
+        title = Franklin.md2html(title; stripp=true)
         stitle = something(pagevar(page, "title"), title) # for sorting (no <code> etc)
         url = get_url(page)
         push!(get!(items, year(date), []), (date=date, title=title, stitle=stitle, url=url))
@@ -196,8 +196,8 @@ end
 function hfun_markdown2html(arg)
     arg = first(arg)
     if arg == "website_descr" || arg == "title" || arg == "markdown_title"
-        desc = locvar(arg)
-        return fd2html(desc; internal=true, nop=true)
+        str = locvar(arg)
+        return Franklin.md2html(str; stripp=true)
     else
         error("unknown argument arg = $arg")
     end
