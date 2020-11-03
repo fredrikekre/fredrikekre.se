@@ -1,0 +1,25 @@
+pre {
+    position: relative;
+}
+.copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0;
+    margin: 0;
+    background: transparent !important;
+    opacity: 0.4;
+    transition: 0.2s opacity;
+    /* Base color from gruvbox-dark */
+    color: #ebdbb2;
+}
+.copy-button:active {
+  transform: translate(1px, 1px);
+}
+.copy-button svg {
+    height: 1.0rem;
+    width: 1.0rem;
+}
+pre:hover .copy-button {
+    opacity: 1;
+}
