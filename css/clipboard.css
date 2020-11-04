@@ -8,10 +8,10 @@ pre {
     padding: 0;
     margin: 0;
     background: transparent !important;
-    opacity: 0.4;
+    opacity: 0.3;
     transition: 0.2s opacity;
     /* Base color from gruvbox-dark */
-    color: #ebdbb2;
+    color: #ebdbb2 !important;
 }
 .copy-button:active {
   transform: translate(1px, 1px);
