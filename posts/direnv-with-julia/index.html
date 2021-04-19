@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="canonical" href="https://fredrikekre.se/posts/direnv-with-julia/"/>
+
+  <meta name="author" content="Fredrik Ekre">
+  <meta name="description" content="Improve your workflow with direnv: this post describes how direnv can be used effectively together with Julia.">
+
+  
+   <link rel="stylesheet" href="/css/gruvbox-dark.css">
+
+<link rel="stylesheet" href="/css/clipboard.css">
+
+ 
+
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="stylesheet" href="/css/hello-hermit.css">
+
+<title>Project specific Julia configuration with direnv | Fredrik Ekre</title>
+
+</head>
+
+<body class="">
+<!-- <body class="dark-theme"> -->
+<div class="container">
+
+<header class="header">
+<span class="header__inner">
+
+<!-- Logo/home button -->
+<a href="/" style="text-decoration: none;">
+<div class="logo">
+  <span class="logo__mark">
+     $ 
+    
+  </span>
+  <span class="logo__text">
+     cd /home/fredrik 
+    
+  </span>
+  <span class="logo__cursor" style=" "></span>
+</div>
+</a>
+
+<span class="header__right">
+  <!-- Navigation bar -->
+  <nav class="menu">
+    <ul class="menu__inner">
+      
+        <li><a href="/posts/">posts</a></li>
+      
+        <li><a href="/about/">about</a></li>
+      
+      <!-- {{ generate_menu nothing }} -->
+    </ul>
+  </nav>
+  <!-- Theme changer -->
+  <span class="menu-trigger hidden">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M0 0h24v24H0z" fill="none"></path>
+      <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+    </svg>
+  </span>
+  <span class="theme-toggle unselectable">
+    <svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+      3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+      13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"></path>
+    </svg>
+  </span>
+</span><!-- header__right -->
+
+</span> <!-- header__inner -->
+</header>
+
+
+<div class="content">
+
+
+  <main class="post">
+  <div class="post-info">
+  <p style="display: flex; justify-content: space-between">
+  <span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 10 minutes
+  </span>
+  <span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> 2021-04-19
+  </span>
+  </p>
+  <p>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7" y2="7"></line></svg> <span class="tag"><a href="/tag/direnv">direnv</a></span><span class="tag"><a href="/tag/julia">julia</a></span><span class="tag"><a href="/tag/open-source">open-source</a></span>
+  </p>
+  </div>
+
+  <article>
+
+  <div class="post-content">
+
+
+<!-- Content appended here -->
+<div class="franklin-content">
+
+
+<h1><a href="/posts/direnv-with-julia/">Project specific Julia configuration with <code>direnv</code></a></h1>
+
+<p>I heard about <a href="https://direnv.net/"><code>direnv</code></a> the first time a couple of years ago, but it wasn&#39;t until the past autumn that I seriously looked into it and tried it out. Now that I have used it for a just over half a year I can say that <code>direnv</code> has become a huge quality-of-life improvement to my development workflow. <code>direnv</code> was recently discussed in the Julia community chat and it was my understanding that not many people were aware of it, or what it can be used for. Therefore I wanted to briefly present <code>direnv</code> in this post with the focus on how to use <code>direnv</code> effectively together with Julia.</p>
+<h2 id="brief_introduction_to_direnv"><a href="#brief_introduction_to_direnv">Brief introduction to <code>direnv</code></a></h2>
+<p>This post is not meant to be a comprehensive guide to <code>direnv</code>, but in order to fully appreciate the rest of the post it is good to have a general understanding of what <code>direnv</code> does. For installation and initial configuration refer to the <a href="https://direnv.net/">official documentation</a>.</p>
+<p><code>direnv</code> is a shell extension that automatically loads &#40;and unloads&#33;&#41; environment variables depending on configuration in the current directory. Before each shell prompt <code>direnv</code> checks for an <code>.envrc</code> file, and, if it exists, spawns a sub-shell where <code>direnv</code>&#39;s standard library &#40;the <em>stdlib</em>&#41; and the <code>.envrc</code> file is loaded. <code>direnv</code> monitors any changes to the environment, and re-exports the changes to the original shell.</p>
+<p>Let&#39;s look at an example: create a directory <code>my-project</code> with a file <code>.envrc</code> which sets the environment variable <code>HELLO</code>:</p>
+<pre><code class="bash hljs">~$ tree -a
+.
+└── my-project
+    └── .envrc
+
+1 directory, 1 file
+
+~$ cat my-project/.envrc
+<span class="hljs-built_in">export</span> HELLO=world</code></pre>
+<p>Let&#39;s first verify that the variable is not set, and then, when we <code>cd</code> to the directory containing the <code>.envrc</code> file, <code>direnv</code> should set the variable:</p>
+<pre><code class="bash hljs">~$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$HELLO</span>
+
+~$ <span class="hljs-built_in">cd</span> my-project
+direnv: error /home/fredrik/my-project/.envrc is blocked.
+Run `direnv allow` to approve its content</code></pre>
+<p>An error – what happened here? <code>direnv</code> comes with a built in security mechanism that blocks execution of <code>.envrc</code> files which have not been manually approved – we wouldn&#39;t want to accidentally execute unknown code by just <code>cd</code>ing to a directory with a file <code>.envrc</code>. After making sure the content of <code>.envrc</code> is legit we can approve the file with the <code>direnv allow</code> command, as the error message suggest. This is not needed the next time we enter this directory, unless the file has been modified.</p>
+<pre><code class="bash hljs">~/my-project$ direnv allow
+direnv: loading ~/my-project/.envrc
+direnv: <span class="hljs-built_in">export</span> +HELLO</code></pre>
+<p>Success&#33; <code>direnv</code> reports that the file was found and loaded, and that the variable <code>HELLO</code> has been re-exported. We can verify that it has the expected value:</p>
+<pre><code class="bash hljs">~/my-project$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$HELLO</span>
+world</code></pre>
+<p>If we step out of this directory, <code>direnv</code> will unload the changes, and the <code>HELLO</code> variable is reset to its original value &#40;unset in this case&#41;:</p>
+<pre><code class="bash hljs">$ <span class="hljs-built_in">cd</span> ..
+direnv: unloading
+
+~$ <span class="hljs-built_in">echo</span> <span class="hljs-variable">$HELLO</span></code></pre>
+<h2 id="configuring_julia_with_direnv"><a href="#configuring_julia_with_direnv">Configuring Julia with <code>direnv</code></a></h2>
+<p>Let&#39;s have a look at how <code>direnv</code> can be used together with Julia. A good start is to look at the <a href="https://docs.julialang.org/en/v1/manual/environment-variables/">Environment Variables section</a> in the manual. However, it is not only things listed there that might be useful for Julia configuration. In the following sections I will describe the things I have found most useful.</p>
+<h3 id="julia_version_management"><a href="#julia_version_management">Julia version management</a></h3>
+<p>Sometimes it is useful to configure a specific Julia version for a project. In a series of pull requests &#40;<a href="https://github.com/direnv/direnv/pull/665">#665</a>, <a href="https://github.com/direnv/direnv/pull/666">#666</a>, <a href="https://github.com/direnv/direnv/pull/667">#667</a>&#41; I added the <code>use julia X.Y.Z</code> command to the <code>direnv</code> stdlib to make it very simple to load a specific version of Julia &#40;requires <code>direnv</code> version 2.22.0 or newer&#41;. For example, to load Julia version 1.6 simply put the following in the <code>.envrc</code> file:</p>
+<pre><code class="bash hljs">use julia 1.6</code></pre>
+<p>Under the hood <code>direnv</code> modifies <code>PATH</code> &#40;and some other variables&#41; such that the specified Julia version is at the top to make sure that <code>julia</code> points to the correct version:</p>
+<pre><code class="bash hljs">$ cat .envrc 
+use julia 1.6
+
+$ julia --version
+julia version 1.6.0
+
+$ cat .envrc 
+use julia 1.5
+
+$ julia --version
+julia version 1.5.4</code></pre>
+<p>The only required configuration is to define the variable <code>JULIA_VERSIONS</code> first, which should point to a directory of Julia installs. In my case I have Julia versions installed to <code>/opt/julia</code>:</p>
+<pre><code class="bash hljs">$ tree -L 1 /opt/julia/
+/opt/julia/
+├── julia-1.0
+├── julia-1.1
+├── julia-1.2
+├── julia-1.3
+├── julia-1.4
+├── julia-1.5
+└── julia-1.6</code></pre>
+<p>and thus put:</p>
+<pre><code class="bash hljs">JULIA_VERSIONS=<span class="hljs-string">&quot;/opt/julia&quot;</span></code></pre>
+<p>in my global configuration file, the <code>direnvrc</code> file &#40;by default located at <code>~/.config/direnv/direnvrc</code>&#41;. By default the prefix <code>julia-</code> is used when <code>direnv</code> looks for the specified version, but this can be changed by setting <code>JULIA_VERSION_PREFIX</code>, see the <a href="https://direnv.net/man/direnv-stdlib.1.html#codeuse-julia-ltversiongtcode">documentation</a> for more details. As an example, if you use the <a href="https://asdf-vm.com/"><code>asdf</code></a> version manager to install Julia you will find that <code>asdf</code> installs versions into <code>~/.asdf/installs/julia/X.Y.Z</code>, i.e. to directories without the <code>julia-</code> prefix. In that case you can put the following in <code>direnvrc</code>:</p>
+<pre><code class="bash hljs">JULIA_VERSIONS=<span class="hljs-string">&quot;<span class="hljs-variable">$HOME</span>/.asdf/installs/julia&quot;</span>
+JULIA_VERSION_PREFIX=<span class="hljs-string">&quot;&quot;</span></code></pre>
+<h3 id="package_environments"><a href="#package_environments">Package environments</a></h3>
+<p>Before discussing how <code>direnv</code> can be used to control the package environment it is good to understand how Julia&#39;s package loading work. The command <code>import Example</code> will prompt Julia to look for a package named <code>Example</code> in the <em>load path</em>. The load path is essentially a list of package environments where Julia should look for what <code>Example</code> means in the current configuration, e.g. which package and which version that should be loaded. The load path is expanded from the global variable <code>LOAD_PATH</code>, where the default configuration looks like this:</p>
+<pre><code class="julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-literal">LOAD_PATH</span>
+</span>3-element Vector{String}:
+ &quot;@&quot;
+ &quot;@v#.#&quot;
+ &quot;@stdlib&quot;
+
+<span class="hljs-meta">julia&gt;</span><span class="julia"> Base<span class="hljs-built_in">.</span><span class="hljs-built_in">load_path</span>() <span class="hljs-comment"># expansion of LOAD_PATH</span>
+</span>2-element Vector{String}:
+ &quot;/home/fredrik/.julia/environments/v1.6/Project.toml&quot;
+ &quot;/opt/julia/julia-1.6/share/julia/stdlib/v1.6&quot;</code></pre>
+<p><code>@</code> expands to the <em>active project</em> which is configured with the <code>--project</code> command line flag, the <a href="https://docs.julialang.org/en/v1/manual/environment-variables/#JULIA_PROJECT"><code>JULIA_PROJECT</code></a> environment variable, or with <code>Pkg.activate</code> &#40;in the example above it is unset&#41;. <code>@v#.#</code> expands to the default global package environment for the current Julia version, and <code>@stdlib</code> expands to the Julia standard library. When trying to import a package called <code>Example</code> Julia will look in each of the entries of the load path and the first occurance of a package called <code>Example</code> will be loaded.</p>
+<p>It is quite common to use a project-local package environment in Julia. This reduces the risk of running into package incompatibilities and helps with reproducibility. The two most common ways to make sure the local package environment is used is to either start Julia with <code>julia --project</code>, or use <code>Pkg.activate&#40;pwd&#40;&#41;&#41;</code>. This will make sure the first entry in <code>LOAD_PATH</code> expands to the current directory. <code>direnv</code> makes it very easy to enable this behavior by default by putting <code>layout julia</code> in the <code>.envrc</code> file:</p>
+<pre><code class="bash hljs">layout julia</code></pre>
+<p>This command sets the environment variable <code>JULIA_PROJECT</code> to the current directory automatically and there is no risk of forgetting to use <code>--project</code> or <code>Pkg.activate</code>.</p>
+<p>As hinted to above the load path is a stack of environments and it is possible to load packages from any entry. In some cases, for example if reproducibility is important, you might want to be even more strict and only allow packages from a single environment. This can be achieved by configuring the <a href="https://docs.julialang.org/en/v1/manual/environment-variables/#JULIA_LOAD_PATH"><code>JULIA_LOAD_PATH</code></a> environment variable directly. The global variable <code>LOAD_PATH</code> is initialized from the <code>JULIA_LOAD_PATH</code> variable &#40;with default values discussed above&#41;. For example, the following &#40;in <code>.envrc</code>&#41; makes sure there is only a single entry, the project in the current directory, in the load path:</p>
+<pre><code class="bash hljs"><span class="hljs-built_in">export</span> JULIA_LOAD_PATH=<span class="hljs-string">&quot;<span class="hljs-variable">${PWD}</span>&quot;</span></code></pre>
+<p>Another usecase is to build a custom stack of environments. Here is an example which puts allows loading of packages from the environment in the current directory, packages from a sub-environment called <code>devtools</code>, and packages from the standard library:</p>
+<pre><code class="bash hljs"><span class="hljs-built_in">export</span> JULIA_LOAD_PATH=<span class="hljs-string">&quot;<span class="hljs-variable">${PWD}</span>:<span class="hljs-variable">${PWD}</span>/devtools:@stdlib&quot;</span></code></pre>
+<h3 id="julia_command_line_options"><a href="#julia_command_line_options">Julia command line options</a></h3>
+<p>Since the <code>.envrc</code> is just a Bash script it is possible to use side effects from its execution. We can define the following function in <code>direnvrc</code> &#40;for global usage&#41;, or in <code>.envrc</code>, to configure project specific Julia command line options:</p>
+<pre><code class="bash hljs"><span class="hljs-function"><span class="hljs-title">julia_args</span></span>() {
+    <span class="hljs-comment"># Create a bin directory</span>
+    mkdir -p bin
+    <span class="hljs-comment"># Create a wrapper script to call julia with the arguments</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;#!/bin/bash
+    exec <span class="hljs-subst">$(which julia)</span> &quot;</span><span class="hljs-variable">$@</span><span class="hljs-string">&quot; \&quot;\$@\&quot;
+    &quot;</span> &gt; bin/julia
+    <span class="hljs-comment"># Make it executable</span>
+    chmod +x bin/julia
+    <span class="hljs-comment"># Make sure bin is in PATH</span>
+    PATH_add bin
+}</code></pre>
+<p>This function creates a wrapper script in the <code>bin</code> directory which launches Julia with the specified command line options. From <code>.envrc</code> it is used as follows:</p>
+<pre><code class="bash hljs"><span class="hljs-comment"># Configure a Julia version</span>
+use julia 1.6
+
+<span class="hljs-comment"># Configure command line options</span>
+julia_args --threads=4 --check-bounds=no --optimize=3</code></pre>
+<p>Simply invoking <code>julia</code> now uses the command line options specifiec in the <code>.envrc</code> file:</p>
+<pre><code class="bash hljs">$ julia -E <span class="hljs-string">&#x27;Threads.nthreads()&#x27;</span>
+4</code></pre>
+<h3 id="project_specific_history"><a href="#project_specific_history">Project specific history</a></h3>
+<p>To keep a project specific REPL history file it is possible to define the <a href="https://docs.julialang.org/en/v1/manual/environment-variables/#JULIA_HISTORY"><code>JULIA_HISTORY</code></a> environment variable in the <code>.envrc</code> file:</p>
+<pre><code class="bash hljs"><span class="hljs-built_in">export</span> JULIA_HISTORY=<span class="hljs-variable">${PWD}</span>/repl_history.jl</code></pre>
+<h3 id="julia_with_direnv_in_vscode"><a href="#julia_with_direnv_in_vscode">Julia with <code>direnv</code> in VSCode</a></h3>
+<p>In order to use <code>direnv</code> with <a href="https://code.visualstudio.com/">VSCode</a> and the <a href="https://www.julia-vscode.org/">Julia extension</a> there are some extra configuration needed. The reason for this is that the extension does not launch Julia through the shell, and we can thus not rely on direnv&#39;s auto-loading of the environment. In addition, the extension spawns multiple julia processes: one for the language server protocol, and one for evaluating user-code. It is only the latter which is of interest to configure using direnv. Fortunately, <code>direnv</code> provides an <code>exec</code> command that can be used to load a <code>.envrc</code> file and then execute a command. This can be utilized by pointing the <code>Julia: Executable Path</code> extension setting to the following executable wrapper script:</p>
+<pre><code class="bash hljs"><span class="hljs-meta">#!/bin/bash</span>
+
+<span class="hljs-comment"># Absolute path to the direnv executable</span>
+DIRENV=/opt/direnv/direnv
+<span class="hljs-comment"># Tell direnv about bash; needed if bash is not in PATH</span>
+<span class="hljs-built_in">export</span> DIRENV_BASH=/bin/bash
+
+<span class="hljs-comment"># Prepend PATH with a fallback julia</span>
+JULIA_PATH=/opt/julia/julia-1.6/bin
+<span class="hljs-built_in">export</span> PATH=<span class="hljs-string">&quot;<span class="hljs-variable">${JULIA_PATH}</span>:<span class="hljs-variable">${PATH}</span>&quot;</span>
+
+<span class="hljs-keyword">if</span> [ -z <span class="hljs-string">&quot;<span class="hljs-variable">${JULIA_LANGUAGESERVER}</span>&quot;</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-comment"># REPL process; use direnv exec to load .envrc file</span>
+    <span class="hljs-built_in">exec</span> <span class="hljs-string">&quot;<span class="hljs-variable">${DIRENV}</span>&quot;</span> <span class="hljs-built_in">exec</span> <span class="hljs-string">&quot;<span class="hljs-variable">${PWD}</span>&quot;</span> julia <span class="hljs-string">&quot;<span class="hljs-variable">${@}</span>&quot;</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-comment"># Language Server process; exec the fallback julia</span>
+    <span class="hljs-built_in">exec</span> julia <span class="hljs-string">&quot;<span class="hljs-variable">${@}</span>&quot;</span>
+<span class="hljs-keyword">fi</span></code></pre>
+<p>This looks a bit convoluted but it is pretty simple. First we set up the absolute path to <code>direnv</code> and configure <code>direnv</code>&#39;s Bash path with the <code>DIRENV_BASH</code> environment variable. This is important since we are not in control of how this script is invoked, and, in particular, <code>PATH</code> might not be what we expect. Next, a fallback julia location is prepended to <code>PATH</code>. This fallback will be used by the language server process &#40;and by the user process unless a different julia location is configured in the <code>.envrc</code> file&#41;. Finally, we inspect the <code>JULIA_LANGUAGESERVER</code> variable, which tells us whether we are currently launching the language server process or not. For the user process we launch julia through <code>direnv exec</code> and for the language server process the fallback julia, that was previously configured, is <code>exec</code>d.</p>
+<p>Let&#39;s verify that it worked using the following <code>.envrc</code> file:</p>
+<pre><code class="bash hljs"><span class="hljs-built_in">export</span> HELLO=world</code></pre>
+<p>After approving the file &#40;<code>direnv allow</code> in an embedded or external terminal&#41; we launch a Julia REPL process with the <code>Julia: Start REPL</code> command:</p>
+<pre><code class="julia-repl hljs">direnv: loading ~/dev/Example/.envrc
+<span class="hljs-meta">julia&gt;</span></code></pre>
+<p>From the output we see that direnv found the <code>.envrc</code> file and loaded it and we can verify that the <code>HELLO</code> variable defined in the file is set:</p>
+<pre><code class="julia-repl hljs">direnv: loading ~/dev/Example/.envrc
+<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-literal">ENV</span>[<span class="hljs-string">&quot;HELLO&quot;</span>]
+</span>&quot;world&quot;</code></pre>
+<h2 id="concluding_remarks"><a href="#concluding_remarks">Concluding remarks</a></h2>
+<p>In this post I have presented <code>direnv</code> and how it can be used to configure Julia. <code>direnv</code> is, of course, very useful for other things too, such as project local API keys etc. Most of the things presented in the post are things that I use daily, and that I feel have improved my workflow very much. I really recommend you to try <code>direnv</code>, and I hope you will find it useful&#33;</p>
+</div><!-- CONTENT ENDS HERE -->
+
+    </div>
+    </article>
+    <hr>
+
+<!--
+    <div class="post-info">
+    <p>
+    {{ svg tag }} {{ jlinsert pagetags }}
+    </p>
+
+
+    </div>
+-->
+    </main>
+
+
+
+    </div> <!-- <div class="content"> -->
+
+    <footer class="footer">
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy 2021 <a rel="author" href="/">Fredrik Ekre</a></span>
+            <span><a rel="license" href="/about/#license">License</a></span>
+            <span><a href="/about/#privacy_policy">Privacy Policy</a></span>
+        </div>
+    </div>
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Website built with <a href="https://franklinjl.org/">Franklin.jl</a></span>
+        </div>
+    </div>
+</footer>
+
+
+    
+     <script src="/libs/highlight/highlight.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha512-hDWGyh+Iy4Mr9AHOzUP2+Y0iVPn/BwxxaoSleEjH/i1o4EVTF/sh0/A1Syii8PWOae+uPr+T/KHwynoebSuAhw==" crossorigin="anonymous"></script>
+<script src="/libs/clipboard.js"></script>
+
+ 
+
+    <script src="/libs/hello-hermit.js"></script>
+
+    </div> <!-- container -->
+  </body>
+</html>
