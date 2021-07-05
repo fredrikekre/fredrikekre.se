@@ -313,7 +313,8 @@ hello, world
 
 ## Concluding remarks
 
-In this post I have presented some changes to the julia language syntax highlighter in the highlight.js library. In my opinion they are all strict improvements, and my plan is to submit as much as possible to the upstream project. In the meantime you can either use this file: [julia.highlight.js (86K)](/assets/julia.highlight.js), or this file: [julia.highlight.min.js (27K)](/assets/julia.highlight.min.js), which contain the `julia` and `julia-repl` languages, or build from source using [this branch](https://github.com/fredrikekre/highlight.js/tree/fe/julia-unleashed) on my fork if you need compile with more languages included.
+In this post I have presented some changes to the julia language syntax highlighter in the highlight.js library. In my opinion they are all strict improvements, and my plan is to submit as much as possible to the upstream project. In the meantime you can either use this file: [julia.highlight.js (101K)](/assets/julia.highlight.js), or this file: [julia.highlight.min.js (29K)](/assets/julia.highlight.min.js), which contain the `julia` and `julia-repl` languages, or build from source using [this branch](https://github.com/fredrikekre/highlight.js/tree/fe/julia-unleashed) on my fork if you need compile with more languages included.
+
 
 Lets rewind and look at the example from the beginning of the post once again. While it doesn't exercise all of the changes, I hope you agree with me that the new markup is an improvement!
 
