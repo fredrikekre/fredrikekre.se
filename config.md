@@ -3,6 +3,7 @@
 @def website_title = "Fredrik Ekre"
 @def website_description = "My personal website. I am a PhD student in computational mechanics and enjoy programming. Sometimes post about research, programming, and other topics."
 @def website_url = "https://fredrikekre.se"
+@def generate_rss = true
 
 +++
 # Exclude everything that is not explicitly in include
@@ -22,6 +23,7 @@ ignore = [setdiff([isfile(x) ? x : x * "/" for x in readdir()], _include); _excl
 <!-- @def title = "Fredrik Ekre" -->
 @def sitename = "Fredrik Ekre"
 @def author.name = "Fredrik Ekre"
+@def author = "Fredrik Ekre"
 
 <!-- Social icons -->
 @def social = (
