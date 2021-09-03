@@ -28,6 +28,7 @@ ignore = [setdiff([isfile(x) ? x : x * "/" for x in readdir()], _include); _excl
 <!-- Social icons -->
 @def social = (
         github = "https://github.com/fredrikekre",
+        ssh = "/keys/fredrikekre_rsa.pub",
     )
 
 <!-- Logo -->
