@@ -3,7 +3,8 @@ import Franklin, LiveServer
 Franklin.HIGHLIGHTJS[] = get(ENV, "HIGHLIGHTJS", "highlight.js")
 
 
-function on_write(pg, vars; output_path)
+function on_write(pg, vars; output_path=nothing)
+    output_path === nothing && return
     if endswith(output_path, "highlight-julia/index.html")
         l = length(pg)
         r = r"""^<div class="toggle-code-new">

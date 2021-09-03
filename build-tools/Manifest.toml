@@ -42,9 +42,11 @@ uuid = "7b1f6079-737a-58dc-b8bc-7a2ca5c1b5ee"
 
 [[Franklin]]
 deps = ["Dates", "DelimitedFiles", "DocStringExtensions", "ExprTools", "FranklinTemplates", "HTTP", "Literate", "LiveServer", "Logging", "Markdown", "NodeJS", "OrderedCollections", "Pkg", "REPL", "Random"]
-git-tree-sha1 = "cb6206b1d498ff96048ebdb597334ee8169d7f98"
+git-tree-sha1 = "305698a561ad3e65b59706313a88bcacc6441f4b"
+repo-rev = "fe/on-write"
+repo-url = "https://github.com/fredrikekre/Franklin.jl.git"
 uuid = "713c75ef-9fc9-4b05-94a9-213340da978e"
-version = "0.10.49"
+version = "0.10.50"
 
 [[FranklinTemplates]]
 deps = ["LiveServer"]
