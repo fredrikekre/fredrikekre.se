@@ -9,7 +9,7 @@
 # Exclude everything that is not explicitly in include
 _include = ["_assets/", "_css/", "_libs/", "_layout/", "index.html", "404.md", "posts/", "about/"]
 _exclude = if get(ENV, "FRANKLIN_OPTIMIZE", nothing) == "true"
-        # ["_libs/highlight/highlight.pack.js"]
+        # ["_libs/highlight/highlight.min.js"]
         String[]
     else
         String[]
