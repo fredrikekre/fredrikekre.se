@@ -101,16 +101,15 @@
 <!-- Content appended here -->
 <div class="franklin-content">
 
-
 <h1><a href="/posts/highlight-julia/">Improved syntax highlighting for Julia on the web</a></h1>
 
 <p>In the process of writing another post I looked into how to properly syntax highlight Julia code on a website like this. The static site generator <a href="https://franklinjl.org/">Franklin.jl</a>, used for this website, enables syntax highlighting using the JavaScript library <a href="https://highlightjs.org/">highlight.js</a>. However, I wasn&#39;t quite happy with the result so I decided to spend the weekend trying to improve it<sup>not a conscious decision, I spent way too much time on this...</sup>. Highlight.js is also used by many other tools, for example: <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a>, the documentation generator used by Julia and a majority of the package ecosystem; <a href="https://www.discourse.org/">Discourse</a>, the platform hosting Julia&#39;s <a href="https://discourse.julialang.org/">discussion forum</a>; and <a href="https://stackoverflow.com/questions/tagged/julia">StackOverflow</a>. My hope is that the improvements presented in this post will eventually reach those platforms, among others, and benefit readers of Julia code everywhere.</p>
 <p>I am not sure this post is of general interest – it merely presents the changes that I made – but, since I had almost all content written already for debugging my poor JavaScript coding, I decided to do some finishing touches and publish it. In hindsight it was probably a good idea since I found numerous corner cases that wasn&#39;t handled correctly.</p>
-<h2 id="tldr_highlightjs"><a href="#tldr_highlightjs">TL;DR: highlight.js</a></h2>
+<h2 id="tldr_highlightjs"><a href="#tldr_highlightjs" class="header-anchor">TL;DR: highlight.js</a></h2>
 <p>Before continuing I think it is good to have a basic overview of what highlight.js does. At the core highlight.js is a &quot;labeler&quot; which, given a snippet of code, tries to label all the words/operators/symbols/etc with an appropriate tag. The tags are language agnostic categories such as <code>keyword</code>, <code>number</code>, <code>string</code>, <code>literal</code>, etc. The full list, and their intended usage can be seen <a href="https://highlightjs.readthedocs.io/en/latest/css-classes-reference.html">here</a>. The labeling is done using regular expressions, with the help of some language specific rules and lists of keywords. Given that it is not a full fledged parser it can be tricky to correctly label everything.</p>
 <p>When everything has been labeled it is just a matter of selecting a color scheme that assigns color and/or text style to each tag. There are a bunch of styles available on the <a href="https://highlightjs.org/static/demo/">demo page</a>. For this post I use a modified version of the <code>Gruvbox Dark</code> theme. Since the number of tags is limited it is also very easy to create your own theme, or, as I did for this post, modify an existing one.</p>
 <p><em>The focus for the rest of the post is on the tagging itself and not the specific styling.</em> Consider using your browsers developer tools to inspect the code snippets to better understand which patterns in the code are being tagged, and with which tag the are labeled with.</p>
-<h2 id="status_quo"><a href="#status_quo">Status Quo</a></h2>
+<h2 id="status_quo"><a href="#status_quo" class="header-anchor">Status Quo</a></h2>
 <p>Lets look at an example comparing Julia with C using the current release of highlight.js &#40;version 10.3.1&#41;:</p>
 <pre><code class="julia-old hljs"><span class="hljs-keyword">function</span> main(who::<span class="hljs-built_in">Union</span>{<span class="hljs-built_in">String</span>,Nothing} = <span class="hljs-literal">nothing</span>)
     <span class="hljs-keyword">if</span> who === <span class="hljs-literal">nothing</span>
@@ -119,9 +118,9 @@
     print(stdout, <span class="hljs-string">&quot;hello, <span class="hljs-subst">$(who)</span>!\n&quot;</span>)
     <span class="hljs-keyword">return</span> <span class="hljs-literal">nothing</span>
 <span class="hljs-keyword">end</span></code></pre>
-<pre><code class="c hljs"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
-<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])</span> </span>{
-    <span class="hljs-keyword">char</span> *who = <span class="hljs-string">&quot;world&quot;</span>;
+<pre><code class="c hljs"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span> {
+    <span class="hljs-type">char</span> *who = <span class="hljs-string">&quot;world&quot;</span>;
     <span class="hljs-keyword">if</span> (argc &gt; <span class="hljs-number">1</span>) {
         who = argv[<span class="hljs-number">1</span>];
     }
@@ -130,9 +129,9 @@
 }</code></pre>
 <p>Overall the Julia output is quite good for this example: keywords such as <code>function</code>, <code>if</code>, <code>return</code> and <code>end</code> are tagged as keywords; strings are recognized as <code>string</code>s; <code>nothing</code> is tagged as <code>literal</code>; and string interpolation is tagged as <code>subst</code>. However, when looking into the details, and in particular when comparing to the C example, it is evident that the syntax highlighter for Julia is not as sophisticated as the one for C. In particular, the C highlighter recognized <code>int main&#40;int argc, char *argv&#91;&#93;&#41;</code> as a function definition &#40;tagged as <code>function</code>&#41; with <code>main</code> tagged as <code>title</code> and <code>argc</code>, <code>*argv&#91;&#93;</code> tagged as <code>params</code> – surely the same can be achieved for Julia too&#33;</p>
 <p>You might also note that <code>Nothing</code> and <code>stdout</code> was not recognized in the Julia example. This turned out to be because the internal lists of keyword and constants had not been updated in some time. Updating these was purely a mechanical task and the patch is in fact already <a href="https://github.com/highlightjs/highlight.js/pull/2781">merged upstream</a>.</p>
-<h2 id="improvements_to_the_julia_syntax_highlighter"><a href="#improvements_to_the_julia_syntax_highlighter">Improvements to the Julia syntax highlighter</a></h2>
+<h2 id="improvements_to_the_julia_syntax_highlighter"><a href="#improvements_to_the_julia_syntax_highlighter" class="header-anchor">Improvements to the Julia syntax highlighter</a></h2>
 <p>Enough talking – on to the fun stuff&#33; The sections below simply demonstrates all the changes that I made, with some comments. Every code snippet can be toggled in their upper right corner to compare with the &quot;old&quot; highlighting. Once again I encourage you to inspect the snippets using the browser developer tools, it can be quite informative&#33;</p>
-<h3 id="infix_operators_and_assignment"><a href="#infix_operators_and_assignment">Infix operators and assignment</a></h3>
+<h3 id="infix_operators_and_assignment"><a href="#infix_operators_and_assignment" class="header-anchor">Infix operators and assignment</a></h3>
 <p>Infix operators and assignment are now tagged. Assignment and the short-circuiting control-flow operators <code>&amp;&amp;</code> and <code>||</code> are tagged as <code>keyword</code>:</p>
 
 <div class="toggle-code-wrap" style="position:relative">
@@ -190,7 +189,7 @@ x &gt;&gt;&gt;= y  x &gt;&gt;= y   x &amp;= y    x ⊻= y</code></pre>
 </div>
 </div>
 
-<h3 id="contextual_highlighting_of_types"><a href="#contextual_highlighting_of_types">Contextual highlighting of types</a></h3>
+<h3 id="contextual_highlighting_of_types"><a href="#contextual_highlighting_of_types" class="header-anchor">Contextual highlighting of types</a></h3>
 <p>Highlight.js has a predefined list of types associated with the <code>julia</code> language. This include, for example, <code>String</code>, <code>Int</code>, <code>Vector</code> and <code>Union</code>. When these words are encountered they are tagged with the <code>type</code> tag &#40;previously mislabeled with the <code>built_in</code> tag&#41;. In Julia, however, user-defined types are first class citizens, and usually there is no point in distinguishing them from the built-in types. Obviously the highlighter can not be taught to recognize all types out there, but in Julia there are certain context in which the content must be types. By teaching the highlighter about these contexts it is possible to unconditionally tag it with the <code>type</code> tag.</p>
 <p>Here are some examples of such contexts. Note, in particular, that the user-defined type <code>UserType</code> is correctly tagged.</p>
 <p>Any word directly attached to <code>&#123;...&#125;</code>:</p>
@@ -326,7 +325,7 @@ x = <span class="hljs-built_in">Vector</span>{T}</code></pre>
 </div>
 
 <p>where <code>Vector</code> is wrongly tagged. Perhaps contextual highlighting has sufficiently good coverage that the pre-defined list should be ignored completely?</p>
-<h3 id="type_definitions"><a href="#type_definitions">Type definitions</a></h3>
+<h3 id="type_definitions"><a href="#type_definitions" class="header-anchor">Type definitions</a></h3>
 <p>Type names are tagged as <code>class</code>, here are some examples:</p>
 
 <div class="toggle-code-wrap" style="position:relative">
@@ -401,7 +400,7 @@ x = <span class="hljs-built_in">Vector</span>{T}</code></pre>
 </div>
 
 <p>Note that the contextual highlighting of types does a great job here – it correctly found all the types&#33;</p>
-<h3 id="function_definitions"><a href="#function_definitions">Function definitions</a></h3>
+<h3 id="function_definitions"><a href="#function_definitions" class="header-anchor">Function definitions</a></h3>
 <p>Function names in function definitions are tagged as <code>title</code>, and the function parameters are tagged as <code>params</code>:</p>
 
 <div class="toggle-code-wrap" style="position:relative">
@@ -480,7 +479,7 @@ Base.print(who::T) <span class="hljs-keyword">where</span> T = println(<span cla
 </div>
 </div>
 
-<h3 id="function_calls"><a href="#function_calls">Function calls</a></h3>
+<h3 id="function_calls"><a href="#function_calls" class="header-anchor">Function calls</a></h3>
 <p>The name of functions that are called is tagged with <code>built_in</code>. Technically not all functions are &quot;built-in&quot;s, of course, but I like that they are tagged regardless of who happened to define them; the core language, a package or me. It also finds function calls when broadcasting. Example:</p>
 
 <div class="toggle-code-wrap" style="position:relative">
@@ -500,7 +499,7 @@ sayhi.([<span class="hljs-string">&quot;world&quot;</span>, <span class="hljs-st
 </div>
 </div>
 
-<h3 id="miscellaneous"><a href="#miscellaneous">Miscellaneous</a></h3>
+<h3 id="miscellaneous"><a href="#miscellaneous" class="header-anchor">Miscellaneous</a></h3>
 <p>Here is a list of miscellaneous minor changes and bugfixes that I found while working on the rest.</p>
 <p>Literal regular expressions, <code>r&quot;...&quot;</code> and <code>r&quot;&quot;&quot;...&quot;&quot;&quot;</code> are now tagged as <code>regexp</code> instead of <code>string</code>:</p>
 
@@ -665,16 +664,16 @@ f!(x)</code></pre>
 </div>
 </div>
 
-<h3 id="repl_highlighting"><a href="#repl_highlighting">REPL highlighting</a></h3>
+<h3 id="repl_highlighting"><a href="#repl_highlighting" class="header-anchor">REPL highlighting</a></h3>
 <p>Highlight.js also support highlighting of Julia REPL code using <code>julia-repl</code> as the language tag. This language definition is very simple – it <a href="https://github.com/highlightjs/highlight.js/blob/21b146644e15ba2b101341da0d3e4dc61db53056/src/languages/julia-repl.js#L29-L38">literally</a> just detects the <code>julia&gt;</code> prompt, strips the proper amount of leading whitespace, and processes the result using the regular <code>julia</code> language implementation. This means that improved REPL highlighting is obtained &quot;for free&quot;:</p>
-<pre><code class="julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-keyword">function </span><span class="hljs-title">sayhello</span>(<span class="hljs-params">who</span><span class="hljs-built_in">::</span><span class="hljs-type">S</span>) <span class="hljs-keyword">where</span> <span class="hljs-type">S</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">AbstractString</span>
+<pre><code class="julia-repl hljs"><span class="hljs-meta">julia&gt;</span><span class="language-julia"> <span class="hljs-keyword">function </span><span class="hljs-title">sayhello</span>(<span class="hljs-params">who</span><span class="hljs-built_in">::</span><span class="hljs-type">S</span>) <span class="hljs-keyword">where</span> <span class="hljs-type">S</span> <span class="hljs-built_in">&lt;:</span> <span class="hljs-type">AbstractString</span>
            <span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;hello, &quot;</span>, who)
        <span class="hljs-keyword">end</span>
 </span>sayhello (generic function with 1 method)
 
-<span class="hljs-meta">julia&gt;</span><span class="julia"> <span class="hljs-built_in">sayhello</span>(<span class="hljs-string">&quot;world&quot;</span>)
+<span class="hljs-meta">julia&gt;</span><span class="language-julia"> <span class="hljs-built_in">sayhello</span>(<span class="hljs-string">&quot;world&quot;</span>)
 </span>hello, world</code></pre>
-<h2 id="concluding_remarks"><a href="#concluding_remarks">Concluding remarks</a></h2>
+<h2 id="concluding_remarks"><a href="#concluding_remarks" class="header-anchor">Concluding remarks</a></h2>
 <p>In this post I have presented some changes to the julia language syntax highlighter in the highlight.js library. In my opinion they are all strict improvements, and my plan is to submit as much as possible to the upstream project. In the meantime you can either use this file: <a href="/assets/julia.highlight.js">julia.highlight.js &#40;101K&#41;</a>, or this file: <a href="/assets/julia.highlight.min.js">julia.highlight.min.js &#40;29K&#41;</a>, which contain the <code>julia</code> and <code>julia-repl</code> languages, or build from source using <a href="https://github.com/fredrikekre/highlight.js/tree/fe/julia-unleashed">this branch</a> on my fork if you need compile with more languages included.</p>
 <p>Lets rewind and look at the example from the beginning of the post once again. While it doesn&#39;t exercise all of the changes, I hope you agree with me that the new markup is an improvement&#33;</p>
 
@@ -1002,7 +1001,6 @@ Base.show(io::<span class="hljs-built_in">IO</span>, m::<span class="hljs-string
 
     
      <script src="/libs/highlight/highlight.min.js"></script>
-
 
  
 

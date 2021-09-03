@@ -99,11 +99,10 @@
 <!-- Content appended here -->
 <div class="franklin-content">
 
-
 <h1><a href="/posts/pkg-project-manifest-environments/">JuliaCon 2019: Pkg, Project.toml, Manifest.toml and Environments</a></h1>
 
 <p>This is one of my presentations from JuliaCon 2019. The slides are available <a href="https://docs.google.com/presentation/d/e/2PACX-1vT6XYlWB0bxAoRIz4wRG9nRGktugbTBAglNXHvOIUPfZhSSYaT5iXqfIn0ISaUjtyrXDw3Jk03PxVK8/pub?start&#61;false&amp;loop&#61;false&amp;delayms&#61;3000">here</a>, and a recording of the talk is available <a href="https://youtu.be/q-LV4zoxc-E">here</a>.</p>
-<h2 id="abstract"><a href="#abstract">Abstract</a></h2>
+<h2 id="abstract"><a href="#abstract" class="header-anchor">Abstract</a></h2>
 <p>Julia&#39;s new package manager, <a href="https://github.com/JuliaLang/Pkg.jl"><code>Pkg</code></a> &#40;codename <code>Pkg3</code>&#41;, was released together with version 1.0 of the Julia language. The new package manager is a complete rewrite of the old one, and solves many of the problems observed in the old version. One major feature of the new package manager is the concept of <em>package environments</em>, which can be described as independent, sandboxed, sets of packages.</p>
 <p>A package environment is represented by a <code>Project.toml</code> and <code>Manifest.toml</code> file pair. These files keep track of what packages, and what versions, are available in a given environment. Since environments are &quot;cheap&quot;, just two files, they can be used liberally. It is often useful to create new environments for every new coding project, instead of installing packages on the global level. Since the package manager modifies the current project, e.g. when adding, removing or updating packages, there is no risk for these operations to mess up other environments.</p>
 <p>The fact that exact versions of packages in the environment is being recorded means that Julia has reproducibility built-in. As long as the <code>Project.toml</code> and <code>Manifest.toml</code> file pair is available it is possible to replicate exactly the same package environment. Some typical use cases include being able to replicate the same package environment on a different machine, and being able to go back in time and run some old code which might require some old versions of packages.</p>
