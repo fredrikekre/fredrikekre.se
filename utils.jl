@@ -55,20 +55,13 @@ function hfun_eval(arg)
 end
 
 function hfun_definetagtitle()
-    return hfun_define(["title=\"#$(locvar("fd_tag"))\""])
+    return hfun_define(["title", "#$(locvar("fd_tag"))"])
 end
 
 function hfun_define(arg)
-    arg = arg[1]
-    if (m = match(Franklin.ASSIGN_PAT, arg)) !== nothing
-        vname, vdef = String.(m.captures[1:2])
-        Franklin.set_vars!(Franklin.LOCAL_VARS, [vname => vdef, ]) # TODO: Use set_var! instead ???
-    elseif (m = match(r"^([a-zA-Z_]\S*)", arg)) !== nothing
-        vname = String(m.captures[1])
-        Franklin.set_vars!(Franklin.LOCAL_VARS, [vname => "nothing", ]) # TODO: Use set_var! instead ???
-    else
-        @warn "misformed {{ define ... }} statement" arg
-    end
+    vname = arg[1]
+    vdef = repr(get(arg, 2, nothing))
+    Franklin.set_vars!(Franklin.LOCAL_VARS, [vname => vdef, ]) # TODO: Use set_var! instead ???
     return ""
 end
 function hfun_undef(arg)
@@ -195,8 +188,9 @@ end
 
 function hfun_markdown2html(arg)
     arg = first(arg)
-    if arg == "website_descr" || arg == "title" || arg == "markdown_title"
+    if arg == "website_description" || arg == "title" || arg == "markdown_title"
         str = locvar(arg)
+        @assert str !== nothing
         return Franklin.md2html(str; stripp=true)
     else
         error("unknown argument arg = $arg")

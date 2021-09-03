@@ -1,7 +1,7 @@
 <!-- RSS settings -->
 
 @def website_title = "Fredrik Ekre"
-@def website_descr = "My personal website. I am a PhD student in computational mechanics and enjoy programming. Sometimes post about research, programming, and other topics."
+@def website_description = "My personal website. I am a PhD student in computational mechanics and enjoy programming. Sometimes post about research, programming, and other topics."
 @def website_url = "https://fredrikekre.se"
 
 +++

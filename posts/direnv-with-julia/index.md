@@ -5,13 +5,11 @@ var"layout-post" = nothing
 tags = ["direnv", "julia", "open-source"]
 hascode = true
 rss = "Improve your workflow with direnv: this post describes how direnv can be used effectively together with Julia."
-+++
 
-+++
 # Dependent variables
-title = replace(locvar("markdown_title"), "`" => "")
-website_descr = locvar("rss")
-rss_pubdate = Date(locvar("date"))
+title = replace(markdown_title, "`" => "")
+website_description = rss
+rss_pubdate = Date(date)
 +++
 
 
@@ -93,13 +91,13 @@ use julia 1.6
 Under the hood `direnv` modifies `PATH` (and some other variables) such that the specified Julia version is at the top to make sure that `julia` points to the correct version:
 
 ```bash
-$ cat .envrc 
+$ cat .envrc
 use julia 1.6
 
 $ julia --version
 julia version 1.6.0
 
-$ cat .envrc 
+$ cat .envrc
 use julia 1.5
 
 $ julia --version

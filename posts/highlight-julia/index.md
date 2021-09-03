@@ -5,12 +5,10 @@ var"layout-post" = nothing
 tags = ["highlight.js", "javascript", "julia", "open-source"]
 hascode = true
 rss = "A greatly improved syntax highlighter for the Julia programming language in highlight.js."
-+++
 
-+++
 # Dependent variables
-website_descr = locvar("rss")
-rss_pubdate = Date(locvar("date"))
+website_description = rss
+rss_pubdate = Date(date)
 +++
 
 ~~~

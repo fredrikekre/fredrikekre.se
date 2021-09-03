@@ -4,13 +4,11 @@ markdown_title = "JuliaCon 2020: `display`, `show` and `print` – how Julia's d
 var"layout-post" = nothing
 tags = ["julia", "juliacon"]
 rss = "Abstract, slides and a recording from my JuliaCon 2020 presentation titled: *display, show and print – how Julia's display system works*"
-+++
 
-+++
 # Dependent variables
-title = replace(locvar("markdown_title"), "`" => "")
-website_descr = replace(locvar("rss"), "*" => "")
-rss_pubdate = Date(locvar("date"))
+title = replace(markdown_title, "`" => "")
+website_description = replace(rss, "*" => "")
+rss_pubdate = Date(date)
 +++
 
 ~~~
