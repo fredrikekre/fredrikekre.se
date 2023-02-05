@@ -1,5 +1,6 @@
 SHELL := /bin/bash
-JULIA := julia --project=build-tools -L build-tools/L.jl
+JULIA := julia16
+JULIA := ${JULIA} --project=build-tools -L build-tools/L.jl
 
 donothing:
 
